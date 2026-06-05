@@ -1,0 +1,9 @@
+yminnn2-agy-prj-01-49a23513031f.json
+credentials.json
+/.venv
+/.tmp_venv
+**/__pycache__
+*.pyc
+*.pyo
+.env
+/node_modules
