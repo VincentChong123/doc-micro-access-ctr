@@ -45,3 +45,24 @@ export async function getSpreadsheetInfo(spreadsheetId) {
     });
     return response.data;
 }
+
+/**
+ * Adds a new sheet (tab) to the spreadsheet.
+ * @param {string} spreadsheetId 
+ * @param {string} title 
+ * @returns {Promise<Object>} 
+ */
+export async function addSheet(spreadsheetId, title) {
+    const sheets = await getSheetsClient(['https://www.googleapis.com/auth/spreadsheets']);
+    const response = await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+            requests: [{
+                addSheet: {
+                    properties: { title }
+                }
+            }]
+        }
+    });
+    return response.data;
+}
