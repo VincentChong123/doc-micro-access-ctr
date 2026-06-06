@@ -1,0 +1,54 @@
+# Optimized for prek - https://j178.dev
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: detect-private-key
+
+  # -   repo: https://github.com/trufflesecurity/trufflehog
+  #     rev: v3.88.2
+  #     hooks:
+  #     -   id: trufflehog
+  #         name: TruffleHog
+  #         description: Scan secrets with TruffleHog
+  #         entry: trufflehog git file://. --since-commit HEAD --only-verified --fail
+  #         # Use 'trufflehog filesystem' if you want to scan the whole tree every time
+
+  - repo: local
+    hooks:
+      - id: trufflehog
+        name: TruffleHog (System)
+        # Use the absolute path to your home directory binary
+        entry: trufflehog git file://. --since-commit HEAD --only-verified --fail
+        language: system
+        pass_filenames: false
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        # args: ["-lll"] # Only show high-severity issues (like SQLi)
+        args: [ "-lll" ] # Only show high-severity issues (like SQLi)
+        additional_dependencies:
+          - pbr
+  # -   repo: https://github.com/pre-commit/mirrors-pyright
+  #     rev: v1.1.391  # Use the latest version
+  #     hooks:
+  #     -   id: pyright
+  #         # This ensures pyright only runs once on the whole project
+  #         # which is much faster than running on every single file.
+  #         pass_filenames: false
+  #         # Point to your metadata folder
+  #         entry: pyright src_metadata
+  - repo: local
+    hooks:
+      - id: pyright
+        name: Pyright (System)
+        # Runs the pyright already installed in your environment
+        entry: pyright src_metadata
+        language: system
+        pass_filenames: false
+        types: [ python ]

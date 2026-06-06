@@ -1,5 +1,5 @@
 # Interview Preparation Guide: Spreadsheet AI Co-Pilot Gateway
-**Prepared for**: AVP Business Transformation Interview (Digital Strategy Division, MUFG APAC)  
+**Prepared for**: AVP Business Transformation Interview (Digital Strategy Division, MUFG APAC)
 **Primary Focus**: Demonstration of **REQ_5** (Translating Business Needs into Digital Solutions) and **REQ_4** (Safe/Responsible AI).
 
 ---

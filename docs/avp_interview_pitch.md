@@ -1,7 +1,7 @@
 # Executive Pitch: Secure Spreadsheet Co-Pilot Gateway
 
-**Target Audience**: Mr. Yip (Managing Director, Head of Asia Digital Strategy, MUFG)  
-**Proposed Concept**: Zero-Trust, API-Decoupled Maker-Checker Spreadsheet Co-Pilot  
+**Target Audience**: Mr. Yip (Managing Director, Head of Asia Digital Strategy, MUFG)
+**Proposed Concept**: Zero-Trust, API-Decoupled Maker-Checker Spreadsheet Co-Pilot
 **Pillars**: Data Security, Cost Rationalization, Operational Efficiency, User Friction, and Scalability.
 
 ---

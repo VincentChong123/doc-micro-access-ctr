@@ -13,7 +13,7 @@ const DB_FILE = path.join(__dirname, '../../audit_ledger.jsonl');
 
 export function logApprovalToLedger(data) {
     const timestamp = new Date().toISOString();
-    
+
     // 1. Create a cryptographic hash of the critical content to ensure non-repudiation
     const contentString = JSON.stringify({
         case_ref_id: data.case_ref_id,
@@ -21,9 +21,9 @@ export function logApprovalToLedger(data) {
         purpose: data.purpose,
         remarks: data.remarks
     });
-    
+
     const hash = crypto.createHash('sha256').update(contentString).digest('hex');
-    
+
     // 2. Create the immutable audit record
     const record = {
         timestamp,
@@ -32,10 +32,10 @@ export function logApprovalToLedger(data) {
         approver: data.approver_email || "system_user",
         document_hash: hash
     };
-    
+
     // 3. Append to JSONL file (Append-Only operation)
     fs.appendFileSync(DB_FILE, JSON.stringify(record) + '\n');
     console.log(`[LEDGER] Record securely appended for ${data.case_ref_id} with Hash: ${hash.substring(0,8)}...`);
-    
+
     return record;
 }

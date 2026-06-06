@@ -45,7 +45,7 @@ The system utilizes a split interface: **Google Sheets** for data visual grids a
 ## 2. Key Workflow Roles & Responsibilities
 
 ### A. The IT Department (Governance)
-IT maintains absolute control over the AI agent's instructions by defining the `system.md` rules locally (or via an enterprise policy server). 
+IT maintains absolute control over the AI agent's instructions by defining the `system.md` rules locally (or via an enterprise policy server).
 *   **Rule Enforcements**: The LLM is instructed to identify cells containing formulas (e.g. `=SUM(...)`) and leave them completely untouched.
 *   **Response Standards**: Enforces a strict JSON structure for updates to ensure the CLI script can read and parse changes deterministically.
 

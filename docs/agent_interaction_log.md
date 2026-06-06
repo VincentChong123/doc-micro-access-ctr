@@ -1,5 +1,5 @@
 # Agent Interaction & Audit Log Specifications
-**Prepared by**: Digital Strategy Advisory (Digital Strategy Division, APAC)  
+**Prepared by**: Digital Strategy Advisory (Digital Strategy Division, APAC)
 **Subject**: Verification & Compliance Logs for Automated Spreadsheet Modifications
 
 ---

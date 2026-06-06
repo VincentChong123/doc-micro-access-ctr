@@ -27,7 +27,7 @@ Consensus: Proof of Authority.
 
 <!-- start-readonly -->
 ### 2. Regulatory Compliance Policy
-All operations must comply with MAS technology risk guidelines (TRM v2.0). 
+All operations must comply with MAS technology risk guidelines (TRM v2.0).
 Encryption at rest is mandatory using AES-256.
 <!-- end-readonly -->
 
@@ -46,31 +46,31 @@ const MOCK_SHEET_DATA = {
     { row: 1, col: 2, value: "Current Budget (USD)", formula: null, access: "readonly", address: "B1" },
     { row: 1, col: 3, value: "LLM Revised Forecast (USD)", formula: null, access: "readonly", address: "C1" },
     { row: 1, col: 4, value: "Audit Notes", formula: null, access: "readonly", address: "D1" },
-    
+
     // Row 2 - VC Investments (forecast is writable)
     { row: 2, col: 1, value: "Strategic VC Investments", formula: null, access: "readonly", address: "A2" },
     { row: 2, col: 2, value: 5000000, formula: null, access: "readonly", address: "B2" },
     { row: 2, col: 3, value: "", formula: null, access: "writable", address: "C2" },
     { row: 2, col: 4, value: "Evaluate Series B targets", formula: null, access: "readonly", address: "D2" },
-    
+
     // Row 3 - Fintech Alliances (forecast is writable)
     { row: 3, col: 1, value: "Fintech Innovation Alliances", formula: null, access: "readonly", address: "A3" },
     { row: 3, col: 2, value: 2500000, formula: null, access: "readonly", address: "B3" },
     { row: 3, col: 3, value: "", formula: null, access: "writable", address: "C3" },
     { row: 3, col: 4, value: "Partnerships with local startups", formula: null, access: "readonly", address: "D3" },
-    
+
     // Row 4 - Regulatory Audit (locked)
     { row: 4, col: 1, value: "Regulatory Audit (MAS Tech)", formula: null, access: "readonly", address: "A4" },
     { row: 4, col: 2, value: 750000, formula: null, access: "readonly", address: "B4" },
     { row: 4, col: 3, value: 750000, formula: null, access: "readonly", address: "C4" },
     { row: 4, col: 4, value: "Fixed MAS statutory assessment fee", formula: null, access: "readonly", address: "D4" },
-    
+
     // Row 5 - API Vault Secrets (hidden/redacted)
     { row: 5, col: 1, value: "API Vault Secret Key", formula: null, access: "readonly", address: "A5" },
     { row: 5, col: 2, value: "mufg-sec-key-88992-abc", formula: null, access: "hidden", address: "B5" },
     { row: 5, col: 3, value: "[REDACTED - HIDDEN DATA]", formula: null, access: "hidden", address: "C5" },
     { row: 5, col: 4, value: "Credentials for Sandbox API connections", formula: null, access: "readonly", address: "D5" },
-    
+
     // Row 6 - Total Budget (Formulas, locked)
     { row: 6, col: 1, value: "Total Digital Budget", formula: null, access: "readonly", address: "A6" },
     { row: 6, col: 2, value: 8250000, formula: "=SUM(B2:B4)", access: "readonly", address: "B6" },
@@ -109,7 +109,7 @@ const elements = {
   tabSheets: document.getElementById('tabSheets'),
   markdownModeView: document.getElementById('markdownModeView'),
   sheetsModeView: document.getElementById('sheetsModeView'),
-  
+
   // Settings Modal
   settingsBtn: document.getElementById('settingsBtn'),
   settingsModal: document.getElementById('settingsModal'),
@@ -123,7 +123,7 @@ const elements = {
   docStatusBadge: document.getElementById('docStatusBadge'),
   loadingOverlay: document.getElementById('loadingOverlay'),
   loadingMsg: document.getElementById('loadingMsg'),
-  
+
   // Markdown Panels
   markdownEditor: document.getElementById('markdownEditor'),
   wrapWritableBtn: document.getElementById('wrapWritableBtn'),
@@ -133,7 +133,7 @@ const elements = {
   blockCount: document.getElementById('blockCount'),
   checkerList: document.getElementById('checkerList'),
   defaultTypeSelect: document.getElementById('defaultTypeSelect'),
-  
+
   // Markdown LLM Panels
   statWritableCount: document.getElementById('statWritableCount'),
   statReadonlyCount: document.getElementById('statReadonlyCount'),
@@ -162,7 +162,7 @@ const elements = {
   sheetTitleLabel: document.getElementById('sheetTitleLabel'),
   sheetSubtitleLabel: document.getElementById('sheetSubtitleLabel'),
   sheetsGridContainer: document.getElementById('sheetsGridContainer'),
-  
+
   sheetWritableCount: document.getElementById('sheetWritableCount'),
   sheetReadonlyCount: document.getElementById('sheetReadonlyCount'),
   sheetHiddenCount: document.getElementById('sheetHiddenCount'),
@@ -171,7 +171,7 @@ const elements = {
   sheetPromptPreviewText: document.getElementById('sheetPromptPreviewText'),
   sheetMakerInstruction: document.getElementById('sheetMakerInstruction'),
   runSheetMakerBtn: document.getElementById('runSheetMakerBtn'),
-  
+
   sheetDiffSection: document.getElementById('sheetDiffSection'),
   sheetVerificationBadge: document.getElementById('sheetVerificationBadge'),
   sheetVerificationErrorCard: document.getElementById('sheetVerificationErrorCard'),
@@ -185,7 +185,7 @@ const elements = {
 window.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   initEventHandlers();
-  
+
   // Set initial markdown content
   elements.markdownEditor.value = state.markdown.rawText;
   processMarkdownUpdates();
@@ -195,14 +195,14 @@ window.addEventListener('DOMContentLoaded', () => {
 function loadSettings() {
   state.settings.apiKey = localStorage.getItem('docaccess_api_key') || '';
   state.settings.model = localStorage.getItem('docaccess_model') || 'gemini-2.0-flash';
-  
+
   const savedSim = localStorage.getItem('docaccess_force_simulation');
   state.settings.forceSimulation = savedSim !== null ? savedSim === 'true' : true;
-  
+
   elements.apiKeyInput.value = state.settings.apiKey;
   elements.modelSelect.value = state.settings.model;
   elements.simulatorToggle.checked = state.settings.forceSimulation;
-  
+
   updateAPIIndicator();
 }
 
@@ -210,11 +210,11 @@ function saveSettings() {
   state.settings.apiKey = elements.apiKeyInput.value.trim();
   state.settings.model = elements.modelSelect.value;
   state.settings.forceSimulation = elements.simulatorToggle.checked;
-  
+
   localStorage.setItem('docaccess_api_key', state.settings.apiKey);
   localStorage.setItem('docaccess_model', state.settings.model);
   localStorage.setItem('docaccess_force_simulation', state.settings.forceSimulation.toString());
-  
+
   updateAPIIndicator();
   closeModal();
 }
@@ -222,7 +222,7 @@ function saveSettings() {
 function updateAPIIndicator() {
   const hasKey = !!state.settings.apiKey;
   const isSim = state.settings.forceSimulation || !hasKey;
-  
+
   // Set visual indicators
   if (isSim) {
     elements.apiIndicator.className = 'api-indicator status-simulated';
@@ -251,19 +251,19 @@ function initEventHandlers() {
   // Tab Switching
   elements.tabMarkdown.addEventListener('click', () => switchTab('markdown'));
   elements.tabSheets.addEventListener('click', () => switchTab('sheets'));
-  
+
   // Settings Buttons
   elements.settingsBtn.addEventListener('click', openModal);
   elements.closeSettingsBtn.addEventListener('click', closeModal);
   elements.saveSettingsBtn.addEventListener('click', saveSettings);
   elements.testConnectionBtn.addEventListener('click', testAPIConnection);
-  
+
   // Settings input updates "Simulate Rogue" under context menu
   elements.settingsModal.addEventListener('click', (e) => {
     // Hidden back door to toggle rogue simulator for validation testing
     if (e.target === elements.settingsModal) closeModal();
   });
-  
+
   // Add secret rogue test toggle checkbox dynamically inside settings card
   const checkboxContainer = document.createElement('div');
   checkboxContainer.className = 'form-group';
@@ -275,7 +275,7 @@ function initEventHandlers() {
     </label>
   `;
   elements.saveSettingsBtn.parentElement.before(checkboxContainer);
-  
+
   const rogueToggle = document.getElementById('rogueToggle');
   rogueToggle.checked = state.settings.simulateRogue;
   rogueToggle.addEventListener('change', (e) => {
@@ -287,7 +287,7 @@ function initEventHandlers() {
     state.markdown.rawText = elements.markdownEditor.value;
     processMarkdownUpdates();
   });
-  
+
   // Defaults dropdown
   elements.defaultTypeSelect.addEventListener('change', () => {
     processMarkdownUpdates();
@@ -297,14 +297,14 @@ function initEventHandlers() {
   elements.wrapWritableBtn.addEventListener('click', () => wrapSelection('start-writable', 'end-writable'));
   elements.wrapReadonlyBtn.addEventListener('click', () => wrapSelection('start-readonly', 'end-readonly'));
   elements.wrapHiddenBtn.addEventListener('click', () => wrapSelection('start-hidden', 'end-hidden'));
-  
+
   // Load sample specs / clear
   elements.loadSampleBtn.addEventListener('click', () => {
     elements.markdownEditor.value = SAMPLE_MARKDOWN;
     state.markdown.rawText = SAMPLE_MARKDOWN;
     processMarkdownUpdates();
   });
-  
+
   elements.clearDocBtn.addEventListener('click', () => {
     if (confirm('Clear editor?')) {
       elements.markdownEditor.value = '';
@@ -321,7 +321,7 @@ function initEventHandlers() {
 
   // Run Maker Button
   elements.runMakerBtn.addEventListener('click', runMarkdownMakerLoop);
-  
+
   // Approve/Reject Buttons
   elements.approveBtn.addEventListener('click', approveMarkdownChanges);
   elements.rejectBtn.addEventListener('click', rejectMarkdownChanges);
@@ -329,12 +329,12 @@ function initEventHandlers() {
   // --- SHEETS TAB CONTROLS ---
   elements.fetchSheetBtn.addEventListener('click', fetchGoogleSheetData);
   elements.loadMockSheetBtn.addEventListener('click', loadMockSheetToGrid);
-  
+
   elements.toggleSheetPromptPreview.addEventListener('click', () => {
     elements.toggleSheetPromptPreview.classList.toggle('active');
     elements.sheetPromptPreviewContent.classList.toggle('show');
   });
-  
+
   elements.runSheetMakerBtn.addEventListener('click', runSheetsMakerLoop);
   elements.sheetApproveBtn.addEventListener('click', approveSheetsChanges);
   elements.sheetRejectBtn.addEventListener('click', () => {
@@ -363,15 +363,15 @@ function wrapSelection(startTag, endTag) {
   const start = editor.selectionStart;
   const end = editor.selectionEnd;
   const text = editor.value;
-  
+
   const selectedText = text.substring(start, end);
   const wrapped = `\n<!-- ${startTag} -->\n${selectedText.trim()}\n<!-- ${endTag} -->\n`;
-  
+
   editor.value = text.substring(0, start) + wrapped + text.substring(end);
   state.markdown.rawText = editor.value;
-  
+
   processMarkdownUpdates();
-  
+
   // Refocus and select
   editor.focus();
   editor.setSelectionRange(start + wrapped.length, start + wrapped.length);
@@ -384,14 +384,14 @@ function wrapSelection(startTag, endTag) {
 function parseMarkdownSegments(text, defaultType = 'readonly') {
   const segments = [];
   const regex = /(<!--\s*(start-readonly|start-writable|start-hidden)\s*-->)([\s\S]*?)(<!--\s*(end-readonly|end-writable|end-hidden)\s*-->)/g;
-  
+
   let lastIndex = 0;
   let match;
   let counter = 0;
-  
+
   while ((match = regex.exec(text)) !== null) {
     const matchIndex = match.index;
-    
+
     // Add untagged text before the tag
     if (matchIndex > lastIndex) {
       const untaggedContent = text.substring(lastIndex, matchIndex);
@@ -413,12 +413,12 @@ function parseMarkdownSegments(text, defaultType = 'readonly') {
         });
       }
     }
-    
+
     const startTag = match[1];
     const typeLabel = match[2].replace('start-', ''); // readonly, writable, hidden
     const content = match[3];
     const endTag = match[4];
-    
+
     segments.push({
       id: `block-${counter++}`,
       type: typeLabel,
@@ -428,10 +428,10 @@ function parseMarkdownSegments(text, defaultType = 'readonly') {
       content: content,
       raw: match[0]
     });
-    
+
     lastIndex = regex.lastIndex;
   }
-  
+
   // Add remaining untagged text
   if (lastIndex < text.length) {
     const untaggedContent = text.substring(lastIndex);
@@ -453,7 +453,7 @@ function parseMarkdownSegments(text, defaultType = 'readonly') {
       });
     }
   }
-  
+
   return segments;
 }
 
@@ -477,29 +477,29 @@ function compileLLMInput(segments) {
 function verifyLLMOutput(originalText, llmOutputText, defaultType = 'readonly') {
   const origSegs = parseMarkdownSegments(originalText, defaultType);
   const outSegs = parseMarkdownSegments(llmOutputText, defaultType);
-  
+
   // Filter out the writable zones for comparison of protected boundaries
   const origProtected = origSegs.filter(s => s.type !== 'writable' && s.type !== 'whitespace');
   const outProtected = outSegs.filter(s => s.type !== 'writable' && s.type !== 'whitespace');
-  
+
   if (origProtected.length !== outProtected.length) {
     return {
       success: false,
       error: `Structural Boundary Violation!\nExpected exactly ${origProtected.length} protected (Read-Only/Hidden) segments, but the AI response contained ${outProtected.length} segments. The AI must not add or remove boundary tags.`
     };
   }
-  
+
   for (let i = 0; i < origProtected.length; i++) {
     const orig = origProtected[i];
     const out = outProtected[i];
-    
+
     if (orig.type !== out.type) {
       return {
         success: false,
         error: `Structure Type Violation at protected block ${i + 1}!\nExpected type '${orig.type}' but found type '${out.type}'.`
       };
     }
-    
+
     if (orig.type === 'hidden') {
       const cleanOutContent = out.content.replace(/\s+/g, '').trim();
       const expectedRedacted = '[REDACTED-HIDDENSECTION]';
@@ -519,7 +519,7 @@ function verifyLLMOutput(originalText, llmOutputText, defaultType = 'readonly') 
       }
     }
   }
-  
+
   return {
     success: true,
     origSegs: origSegs,
@@ -533,7 +533,7 @@ function verifyLLMOutput(originalText, llmOutputText, defaultType = 'readonly') 
 function mergeLLMOutput(origSegments, outSegments) {
   let origProtIndex = 0;
   const origProtected = origSegments.filter(s => s.type !== 'writable' && s.type !== 'whitespace');
-  
+
   return outSegments.map(seg => {
     if (seg.type === 'writable') {
       // Writable block edits are accepted from AI
@@ -555,7 +555,7 @@ function mergeLLMOutput(origSegments, outSegments) {
 function processMarkdownUpdates() {
   const defaultType = elements.defaultTypeSelect.value;
   state.markdown.segments = parseMarkdownSegments(state.markdown.rawText, defaultType);
-  
+
   updateMarkdownStats();
   renderOutline();
   renderCheckerBlocks();
@@ -566,13 +566,13 @@ function updateMarkdownStats() {
   let writable = 0;
   let readonly = 0;
   let hidden = 0;
-  
+
   state.markdown.segments.forEach(seg => {
     if (seg.type === 'writable') writable++;
     else if (seg.type === 'readonly') readonly++;
     else if (seg.type === 'hidden') hidden++;
   });
-  
+
   elements.statWritableCount.innerText = writable;
   elements.statReadonlyCount.innerText = readonly;
   elements.statHiddenCount.innerText = hidden;
@@ -581,31 +581,31 @@ function updateMarkdownStats() {
 function renderOutline() {
   elements.outlineList.innerHTML = '';
   const filtered = state.markdown.segments.filter(s => s.type !== 'whitespace');
-  
+
   elements.blockCount.innerText = `${filtered.length} Blocks`;
-  
+
   if (filtered.length === 0) {
     elements.outlineList.innerHTML = `<div class="outline-empty">No structure parsed yet. Type in the editor above.</div>`;
     return;
   }
-  
+
   filtered.forEach((seg, index) => {
     const item = document.createElement('div');
     item.className = 'outline-item';
-    
+
     let label = seg.content.trim().split('\n')[0] || '(Empty Block)';
     if (label.length > 35) label = label.substring(0, 35) + '...';
-    
+
     // Status color bullet
     let badgeClass = 'tag-readonly';
     if (seg.type === 'writable') badgeClass = 'tag-writable';
     else if (seg.type === 'hidden') badgeClass = 'tag-hidden';
-    
+
     item.innerHTML = `
       <span class="outline-item-title">${index + 1}. ${escapeHtml(label)}</span>
       <span class="badge ${badgeClass}">${seg.type}</span>
     `;
-    
+
     item.addEventListener('click', () => {
       // Find the block text inside editor and scroll to it
       const editor = elements.markdownEditor;
@@ -615,7 +615,7 @@ function renderOutline() {
         editor.setSelectionRange(indexInRaw, indexInRaw + seg.raw.length);
       }
     });
-    
+
     elements.outlineList.appendChild(item);
   });
 }
@@ -623,16 +623,16 @@ function renderOutline() {
 function renderCheckerBlocks() {
   elements.checkerList.innerHTML = '';
   const filtered = state.markdown.segments.filter(s => s.type !== 'whitespace');
-  
+
   if (filtered.length === 0) {
     elements.checkerList.innerHTML = `<div class="checker-empty">Please enter some markdown in the Raw Editor.</div>`;
     return;
   }
-  
+
   filtered.forEach((seg) => {
     const card = document.createElement('div');
     card.className = `block-card ${seg.type}-block`;
-    
+
     // Header block status options
     const header = document.createElement('div');
     header.className = 'card-header';
@@ -646,7 +646,7 @@ function renderCheckerBlocks() {
         <button class="badge-toggle toggle-hidden ${seg.type === 'hidden' ? 'active' : ''}" data-id="${seg.id}" data-set="hidden">👁️ Hidden</button>
       </div>
     `;
-    
+
     // Bind click handlers to block card badge triggers to rewrite raw code comments automatically
     header.querySelectorAll('.badge-toggle').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -655,11 +655,11 @@ function renderCheckerBlocks() {
         toggleBlockAccess(blockId, newType);
       });
     });
-    
+
     // Card content body using Marked.js
     const body = document.createElement('div');
     body.className = 'card-body';
-    
+
     if (seg.type === 'hidden') {
       body.className = 'card-body redacted-body';
       body.innerHTML = `
@@ -673,7 +673,7 @@ function renderCheckerBlocks() {
       // Use Marked parser to render beautiful visual Markdown
       body.innerHTML = marked.parse(seg.content || '*Empty*');
     }
-    
+
     card.appendChild(header);
     card.appendChild(body);
     elements.checkerList.appendChild(card);
@@ -683,10 +683,10 @@ function renderCheckerBlocks() {
 function toggleBlockAccess(blockId, newType) {
   const targetSeg = state.markdown.segments.find(s => s.id === blockId);
   if (!targetSeg) return;
-  
+
   // Set new segment type
   targetSeg.type = newType;
-  
+
   // Rewrite rawText by mapping segments list back to text, wrap them in tags
   const updatedText = state.markdown.segments.map(seg => {
     if (seg.id === blockId) {
@@ -701,7 +701,7 @@ function toggleBlockAccess(blockId, newType) {
     }
     return seg.raw;
   }).join('');
-  
+
   elements.markdownEditor.value = updatedText;
   state.markdown.rawText = updatedText;
   processMarkdownUpdates();
@@ -730,13 +730,13 @@ async function runMarkdownMakerLoop() {
     alert('Please enter instructions for the LLM.');
     return;
   }
-  
+
   showLoading('Running Maker LLM loop...');
   elements.diffSection.classList.add('hidden');
-  
+
   const defaultType = elements.defaultTypeSelect.value;
   const compiledInputText = compileLLMInput(state.markdown.segments);
-  
+
   const systemInstruction = `You are a document editing engine.
 Your task is to edit the provided Markdown document based on the user's instructions.
 You must respect the following access controls:
@@ -746,7 +746,7 @@ You must respect the following access controls:
 - Any other text outside comments is read-only.
 
 Your output must be the FULL document with all tags preserved, and all read-only/hidden blocks exactly unchanged. Do not wrap output in extra markdown boxes besides the document itself.`;
-  
+
   const prompt = `User request: ${instruction}
 
 Here is the document to edit:
@@ -754,9 +754,9 @@ ${compiledInputText}`;
 
   try {
     let aiResponseText = '';
-    
+
     const isSimulated = state.settings.forceSimulation || !state.settings.apiKey;
-    
+
     if (isSimulated) {
       // Simulate locally
       await delay(1200);
@@ -765,14 +765,14 @@ ${compiledInputText}`;
       // Live API Call
       aiResponseText = await callGeminiAPI(systemInstruction, prompt);
     }
-    
+
     state.markdown.proposedText = aiResponseText;
-    
+
     // Execute Verification via regex
     const verification = verifyLLMOutput(state.markdown.rawText, state.markdown.proposedText, defaultType);
-    
+
     elements.diffSection.classList.remove('hidden');
-    
+
     if (!verification.success) {
       // Verification Failed
       elements.verificationBadge.className = 'badge badge-danger';
@@ -781,7 +781,7 @@ ${compiledInputText}`;
       elements.verificationErrorMsg.innerText = verification.error;
       elements.approveBtn.disabled = true;
       elements.approveBtn.style.opacity = '0.5';
-      
+
       // Render simple text preview of rogue response
       elements.diffViewer.innerHTML = `
         <div class="diff-item">
@@ -796,13 +796,13 @@ ${compiledInputText}`;
       elements.verificationErrorCard.classList.add('hidden');
       elements.approveBtn.disabled = false;
       elements.approveBtn.style.opacity = '1';
-      
+
       state.markdown.proposedSegments = verification.outSegs;
-      
+
       // Visual Diff
       renderMarkdownDiffs(state.markdown.segments, state.markdown.proposedSegments);
     }
-    
+
   } catch (error) {
     alert(`Error: ${error.message}`);
   } finally {
@@ -812,14 +812,14 @@ ${compiledInputText}`;
 
 function simulateLLMEditing(inputText, instruction) {
   const segments = parseMarkdownSegments(inputText, elements.defaultTypeSelect.value);
-  
+
   // If user toggled rogue breaches
   if (state.settings.simulateRogue) {
     // Breaches locked block
-    return inputText.replace(/<!-- start-readonly -->([\s\S]*?)<!-- end-readonly -->/, 
+    return inputText.replace(/<!-- start-readonly -->([\s\S]*?)<!-- end-readonly -->/,
       "<!-- start-readonly -->\n[BREACHED!] Legal disclaimer deleted by Rogue LLM.\n<!-- end-readonly -->");
   }
-  
+
   // Normal valid simulation
   const edited = segments.map(seg => {
     if (seg.type === 'writable') {
@@ -835,26 +835,26 @@ ${seg.endTag}`;
     }
     return seg.raw;
   }).join('');
-  
+
   return edited;
 }
 
 function renderMarkdownDiffs(origSegs, propSegs) {
   elements.diffViewer.innerHTML = '';
-  
+
   const origWritables = origSegs.filter(s => s.type === 'writable');
   const propWritables = propSegs.filter(s => s.type === 'writable');
-  
+
   if (origWritables.length === 0) {
     elements.diffViewer.innerHTML = '<div class="outline-empty">No writable segments were edited.</div>';
     return;
   }
-  
+
   origWritables.forEach((orig, index) => {
     const prop = propWritables[index] || { content: '' };
-    
+
     if (orig.content.trim() === prop.content.trim()) return;
-    
+
     const diffItem = document.createElement('div');
     diffItem.className = 'diff-item';
     diffItem.innerHTML = `
@@ -871,11 +871,11 @@ function renderMarkdownDiffs(origSegs, propSegs) {
 function approveMarkdownChanges() {
   // Merge and restore original hidden blocks
   const mergedText = mergeLLMOutput(state.markdown.segments, state.markdown.proposedSegments);
-  
+
   elements.markdownEditor.value = mergedText;
   state.markdown.rawText = mergedText;
   processMarkdownUpdates();
-  
+
   elements.diffSection.classList.add('hidden');
   alert('Changes programmatically verified, merged, and updated successfully!');
 }
@@ -892,7 +892,7 @@ function loadMockSheetToGrid() {
   state.sheets.sheetName = MOCK_SHEET_DATA.sheetName;
   state.sheets.dimensions = MOCK_SHEET_DATA.dimensions;
   state.sheets.cells = JSON.parse(JSON.stringify(MOCK_SHEET_DATA.cells)); // deep copy
-  
+
   renderSheetsGrid();
   updateSheetStats();
   updateSheetPromptPreview();
@@ -901,10 +901,10 @@ function loadMockSheetToGrid() {
 function renderSheetsGrid() {
   const container = elements.sheetsGridContainer;
   container.innerHTML = '';
-  
+
   const rows = state.sheets.dimensions.rows;
   const cols = state.sheets.dimensions.cols;
-  
+
   if (rows === 0) {
     container.innerHTML = `
       <div class="sheets-empty">
@@ -913,13 +913,13 @@ function renderSheetsGrid() {
     `;
     return;
   }
-  
+
   elements.sheetTitleLabel.innerText = state.sheets.sheetName;
   elements.sheetSubtitleLabel.innerText = `${rows} Rows x ${cols} Columns`;
-  
+
   const table = document.createElement('table');
   table.className = 'sheets-grid';
-  
+
   // Create Column Headers Row (A, B, C...)
   const headerRow = document.createElement('tr');
   // Top left corner cell
@@ -927,32 +927,32 @@ function renderSheetsGrid() {
   cornerHeader.className = 'row-header';
   cornerHeader.innerText = '';
   headerRow.appendChild(cornerHeader);
-  
+
   for (let c = 1; c <= cols; c++) {
     const th = document.createElement('th');
     th.innerText = getColLetter(c);
     headerRow.appendChild(th);
   }
   table.appendChild(headerRow);
-  
+
   // Render cell rows
   for (let r = 1; r <= rows; r++) {
     const tr = document.createElement('tr');
-    
+
     // Row numeric label
     const rowLabel = document.createElement('td');
     rowLabel.className = 'row-header';
     rowLabel.innerText = r.toString();
     tr.appendChild(rowLabel);
-    
+
     for (let c = 1; c <= cols; c++) {
       const cell = state.sheets.cells.find(cellObj => cellObj.row === r && cellObj.col === c);
       const td = document.createElement('td');
-      
+
       if (cell) {
         td.innerText = cell.value;
         td.className = `cell-${cell.access}`;
-        
+
         if (cell.formula) {
           td.classList.add('cell-formula');
           td.title = `Formula: ${cell.formula}\nValue: ${cell.value}`;
@@ -965,7 +965,7 @@ function renderSheetsGrid() {
     }
     table.appendChild(tr);
   }
-  
+
   container.appendChild(table);
 }
 
@@ -973,13 +973,13 @@ function updateSheetStats() {
   let writable = 0;
   let readonly = 0;
   let hidden = 0;
-  
+
   state.sheets.cells.forEach(cell => {
     if (cell.access === 'writable') writable++;
     else if (cell.access === 'readonly') readonly++;
     else if (cell.access === 'hidden') hidden++;
   });
-  
+
   elements.sheetWritableCount.innerText = writable;
   elements.sheetReadonlyCount.innerText = readonly;
   elements.sheetHiddenCount.innerText = hidden;
@@ -991,7 +991,7 @@ function updateSheetPromptPreview() {
     if (c.access === 'hidden') displayVal = '[REDACTED]';
     return `Cell ${c.address} (${c.access}${c.formula ? ' [Formula: ' + c.formula + ']' : ''}): "${displayVal}"`;
   }).join('\n');
-  
+
   elements.sheetPromptPreviewText.innerText = `[SYSTEM INST]: You are a spreadsheet helper. You can write only to green cells marked 'writable'. Do not overwrite formulas. Return a JSON structure.
 
 [USER INST]: ${elements.sheetMakerInstruction.value || '(No instruction)'}
@@ -1012,24 +1012,24 @@ async function fetchGoogleSheetData() {
     alert('Please enter a Google Apps Script Web App URL.');
     return;
   }
-  
+
   showLoading('Fetching spreadsheet content...');
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network error. Verify API CORS settings.');
-    
+
     const result = await response.json();
     if (result.status === 'error') throw new Error(result.message);
-    
+
     state.sheets.apiUrl = url;
     state.sheets.sheetName = result.sheetName;
     state.sheets.dimensions = result.dimensions;
     state.sheets.cells = result.cells;
-    
+
     renderSheetsGrid();
     updateSheetStats();
     updateSheetPromptPreview();
-    
+
     alert('Connected and loaded Google Sheet successfully!');
   } catch (error) {
     alert(`API Connection Failed: ${error.message}`);
@@ -1048,15 +1048,15 @@ async function runSheetsMakerLoop() {
     alert('Please enter instructions for the spreadsheet.');
     return;
   }
-  
+
   if (state.sheets.cells.length === 0) {
     alert('Please connect or load sheet data first.');
     return;
   }
-  
+
   showLoading('Running Spreadsheet Maker loop...');
   elements.sheetDiffSection.classList.add('hidden');
-  
+
   const cellsRepresentation = state.sheets.cells.map(c => {
     let displayVal = c.value;
     if (c.access === 'hidden') displayVal = '[REDACTED]';
@@ -1069,7 +1069,7 @@ async function runSheetsMakerLoop() {
       hasFormula: !!c.formula
     };
   });
-  
+
   const systemInstruction = `You are a financial model co-pilot.
 Your job is to update values in a spreadsheet according to the user instructions.
 You can ONLY modify values for cells marked as "access": "writable".
@@ -1090,7 +1090,7 @@ ${JSON.stringify(cellsRepresentation, null, 2)}`;
   try {
     let updates = [];
     const isSimulated = state.settings.forceSimulation || !state.settings.apiKey;
-    
+
     if (isSimulated) {
       await delay(1200);
       updates = simulateSheetsLLM(instruction);
@@ -1099,14 +1099,14 @@ ${JSON.stringify(cellsRepresentation, null, 2)}`;
       const parsed = JSON.parse(responseText);
       updates = parsed.updates || [];
     }
-    
+
     state.sheets.proposedUpdates = updates;
-    
+
     // Execute Local Clientside Checks
     const checkResult = verifyProposedSheetsUpdates(updates);
-    
+
     elements.sheetDiffSection.classList.remove('hidden');
-    
+
     if (!checkResult.success) {
       // Security Validation FAILED
       elements.sheetVerificationBadge.className = 'badge badge-danger';
@@ -1115,7 +1115,7 @@ ${JSON.stringify(cellsRepresentation, null, 2)}`;
       elements.sheetVerificationErrorMsg.innerText = checkResult.error;
       elements.sheetApproveBtn.disabled = true;
       elements.sheetApproveBtn.style.opacity = '0.5';
-      
+
       elements.sheetDiffViewer.innerHTML = `
         <div class="diff-item">
           <div class="diff-item-header" style="color:var(--color-locked);">Blocked Updates Details</div>
@@ -1129,10 +1129,10 @@ ${JSON.stringify(cellsRepresentation, null, 2)}`;
       elements.sheetVerificationErrorCard.classList.add('hidden');
       elements.sheetApproveBtn.disabled = false;
       elements.sheetApproveBtn.style.opacity = '1';
-      
+
       renderSheetsDiffs(updates);
     }
-    
+
   } catch (error) {
     alert(`Error: ${error.message}`);
   } finally {
@@ -1149,30 +1149,30 @@ function simulateSheetsLLM(instruction) {
       { row: 6, col: 3, value: 120000 }   // Formula cell (violation)
     ];
   }
-  
+
   // Normal valid forecasts
   const updates = [];
   const cellC2 = state.sheets.cells.find(c => c.row === 2 && c.col === 3);
   const cellC3 = state.sheets.cells.find(c => c.row === 3 && c.col === 3);
-  
+
   if (cellC2 && cellC2.access === 'writable') {
     updates.push({ row: 2, col: 3, value: 5600000 });
   }
   if (cellC3 && cellC3.access === 'writable') {
     updates.push({ row: 3, col: 3, value: 2800000 });
   }
-  
+
   return updates;
 }
 
 function verifyProposedSheetsUpdates(updates) {
   for (let update of updates) {
     const cell = state.sheets.cells.find(c => c.row === update.row && c.col === update.col);
-    
+
     if (!cell) {
       return { success: false, error: `Bound Error: Cell address at row ${update.row}, col ${update.col} does not exist.` };
     }
-    
+
     // 1. Permission guard
     if (cell.access !== 'writable') {
       return {
@@ -1180,7 +1180,7 @@ function verifyProposedSheetsUpdates(updates) {
         error: `Security Violation!\nAI attempted to modify cell ${cell.address} which is marked as ${cell.access.toUpperCase()} (Read-only / Hidden).`
       };
     }
-    
+
     // 2. Formula guard
     if (cell.formula) {
       return {
@@ -1189,18 +1189,18 @@ function verifyProposedSheetsUpdates(updates) {
       };
     }
   }
-  
+
   return { success: true };
 }
 
 function renderSheetsDiffs(updates) {
   elements.sheetDiffViewer.innerHTML = '';
-  
+
   if (updates.length === 0) {
     elements.sheetDiffViewer.innerHTML = '<div class="outline-empty">No updates proposed by AI.</div>';
     return;
   }
-  
+
   updates.forEach(update => {
     const cell = state.sheets.cells.find(c => c.row === update.row && c.col === update.col);
     const diffItem = document.createElement('div');
@@ -1219,27 +1219,27 @@ function renderSheetsDiffs(updates) {
 async function approveSheetsChanges() {
   const updates = state.sheets.proposedUpdates;
   const isSimulated = !state.sheets.apiUrl;
-  
+
   if (isSimulated) {
     // Offline simulation update
     showLoading('Updating local offline grid...');
     await delay(600);
-    
+
     updates.forEach(update => {
       const cell = state.sheets.cells.find(c => c.row === update.row && c.col === update.col);
       if (cell) {
         cell.value = update.value;
       }
     });
-    
+
     // Auto-update sum formulas locally for visuals
     const forecastSum = state.sheets.cells
       .filter(c => (c.row === 2 || c.row === 3 || c.row === 4) && c.col === 3)
       .reduce((sum, c) => sum + (parseFloat(c.value) || 0), 0);
-      
+
     const totalCell = state.sheets.cells.find(c => c.row === 6 && c.col === 3);
     if (totalCell) totalCell.value = forecastSum;
-    
+
     renderSheetsGrid();
     elements.sheetDiffSection.classList.add('hidden');
     hideLoading();
@@ -1255,12 +1255,12 @@ async function approveSheetsChanges() {
         },
         body: JSON.stringify({ updates: updates })
       });
-      
+
       const result = await response.json();
       if (result.status === 'error') {
         throw new Error(result.message);
       }
-      
+
       // Reload sheet values after successful push
       await fetchGoogleSheetData();
       elements.sheetDiffSection.classList.add('hidden');
@@ -1280,13 +1280,13 @@ async function approveSheetsChanges() {
 async function callGeminiAPI(systemInstruction, prompt) {
   const apiKey = state.settings.apiKey;
   const model = state.settings.model;
-  
+
   if (!apiKey) {
     throw new Error('No API Key configured. Go to settings cogs to enter key.');
   }
-  
+
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -1297,19 +1297,19 @@ async function callGeminiAPI(systemInstruction, prompt) {
       systemInstruction: { parts: [{ text: systemInstruction }] }
     })
   });
-  
+
   if (!response.ok) {
     const errorJson = await response.json();
     throw new Error(errorJson.error?.message || 'API request failed');
   }
-  
+
   const result = await response.json();
   const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
-  
+
   if (!textResponse) {
     throw new Error('Empty response returned from model.');
   }
-  
+
   // Strip code fences if returned by LLM
   return cleanJsonResponse(textResponse);
 }
@@ -1327,20 +1327,20 @@ async function testAPIConnection() {
   const key = elements.apiKeyInput.value.trim();
   const model = elements.modelSelect.value;
   const resultDiv = elements.testResultMsg;
-  
+
   if (!key) {
     resultDiv.className = 'test-result-msg test-result-error';
     resultDiv.innerText = 'Please enter an API key first.';
     resultDiv.classList.remove('hidden');
     return;
   }
-  
+
   resultDiv.className = 'test-result-msg';
   resultDiv.innerText = 'Connecting...';
   resultDiv.classList.remove('hidden');
-  
+
   const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
-  
+
   try {
     const response = await fetch(testUrl, {
       method: 'POST',
@@ -1351,7 +1351,7 @@ async function testAPIConnection() {
         contents: [{ parts: [{ text: 'Hello, respond with word OK.' }] }]
       })
     });
-    
+
     if (response.ok) {
       resultDiv.className = 'test-result-msg test-result-success';
       resultDiv.innerText = 'Connection Succeeded! API key is valid.';

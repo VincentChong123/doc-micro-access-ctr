@@ -5,10 +5,10 @@ from google.auth.exceptions import DefaultCredentialsError
 
 def main():
     SPREADSHEET_ID = '13Y6RPqTp7-VJ3Px3pVumSFJdmFMNj6a9VPv1bh4QPC4'
-    
+
     # We will try writing to 'Sheet1!A1:B2'. Change 'Sheet1' to the actual name of your sheet tab.
-    RANGE_NAME = 'Sheet1!A1:B2' 
-    
+    RANGE_NAME = 'Sheet1!A1:B2'
+
     try:
         # Load Application Default Credentials
         # Note: We need full 'spreadsheets' scope for read/write access.
@@ -33,7 +33,7 @@ def main():
     body = {
         'values': values_to_write
     }
-    
+
     try:
         result = sheet.values().update(
             spreadsheetId=SPREADSHEET_ID,

@@ -15,13 +15,13 @@ export const handleApprovalWebhook = async (req, res) => {
         if (status === 'Approved') {
             // 1. Log the cryptographic proof to our MVP Append-Only Ledger
             const auditRecord = logApprovalToLedger(req.body);
-            
+
             // 2. Optionally, update the UI buffer in Google Sheets
             // await updateRange(process.env.SPREADSHEET_1_ID, 'cell_control!B1', [["Approved"]]);
-            
+
             console.log(`✅ Case ${case_ref_id} successfully approved and locked in ledger.`);
-            
-            return res.status(200).json({ 
+
+            return res.status(200).json({
                 message: "Approval processed successfully",
                 audit_hash: auditRecord.document_hash
             });

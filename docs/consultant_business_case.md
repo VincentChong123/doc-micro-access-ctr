@@ -1,12 +1,12 @@
 # Business Case & ROI Analysis: DocAccess Spreadsheet AI Gateway
-**Prepared by**: Digital Strategy Advisory (Digital Strategy Division, APAC)  
+**Prepared by**: Digital Strategy Advisory (Digital Strategy Division, APAC)
 **Subject**: Financial & Risk Evaluation of Decoupled AI Gateways for APAC Partner Banks (Krungsri, Danamon)
 
 ---
 
 ## 1. Executive Summary
 
-This business case evaluates the financial and operational feasibility of deploying the **DocAccess Co-Pilot Gateway** versus standard enterprise-wide **Microsoft Copilot for Microsoft 365** seat licensing. 
+This business case evaluates the financial and operational feasibility of deploying the **DocAccess Co-Pilot Gateway** versus standard enterprise-wide **Microsoft Copilot for Microsoft 365** seat licensing.
 
 From a management consulting perspective, the core thesis is that **horizontal AI licensing creates a significant cost tax with high compliance risk**. By decoupling the AI model via a centralized API gateway and utilizing native spreadsheet range protections, MUFG and its partner banks can achieve **a 92% reduction in software licensing costs** while programmatically eliminating model corruption and data leakage risks.
 

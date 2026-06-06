@@ -37,28 +37,28 @@ function doGet(e) {
     const values = range.getValues();
     const backgrounds = range.getBackgrounds();
     const formulas = range.getFormulas();
-    
+
     const rows = range.getNumRows();
     const cols = range.getNumColumns();
-    
+
     const cellsData = [];
-    
+
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const bg = backgrounds[r][c];
         const val = values[r][c];
         const formula = formulas[r][c];
-        
+
         let access = 'readonly';
         let outputVal = val;
-        
+
         if (bg === COLOR_WRITABLE) {
           access = 'writable';
         } else if (bg === COLOR_HIDDEN) {
           access = 'hidden';
           outputVal = '[REDACTED - HIDDEN DATA]';
         }
-        
+
         cellsData.push({
           row: r + 1,
           col: c + 1,
@@ -69,14 +69,14 @@ function doGet(e) {
         });
       }
     }
-    
+
     return ContentService.createTextOutput(JSON.stringify({
       status: 'success',
       sheetName: sheet.getName(),
       dimensions: { rows, cols },
       cells: cellsData
     })).setMimeType(ContentService.MimeType.JSON);
-    
+
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({
       status: 'error',
@@ -89,32 +89,32 @@ function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents);
     const proposedUpdates = postData.updates; // Array of {row, col, value}
-    
+
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const range = sheet.getDataRange();
     const backgrounds = range.getBackgrounds();
     const formulas = range.getFormulas();
     const originalValues = range.getValues();
-    
+
     // Server-side Verification
     for (let update of proposedUpdates) {
       const r = update.row - 1;
       const c = update.col - 1;
-      
+
       // 1. Boundary Check
       if (r < 0 || r >= backgrounds.length || c < 0 || c >= backgrounds[0].length) {
         return createErrorResponse(`Index out of bounds: Row ${update.row}, Col ${update.col}`);
       }
-      
+
       const bg = backgrounds[r][c];
-      
+
       // 2. Permission Check: Must be Green
       if (bg !== COLOR_WRITABLE) {
         return createErrorResponse(
           `Security violation: Attempted to edit cells outside writable range at ${getCellAddress(update.row, update.col)} (Status: Read-only/Hidden)`
         );
       }
-      
+
       // 3. Formula Check: Never overwrite formulas
       if (formulas[r][c]) {
         return createErrorResponse(
@@ -122,19 +122,19 @@ function doPost(e) {
         );
       }
     }
-    
+
     // If verification passes, apply changes
     for (let update of proposedUpdates) {
       const r = update.row;
       const c = update.col;
       sheet.getRange(r, c).setValue(update.value);
     }
-    
+
     return ContentService.createTextOutput(JSON.stringify({
       status: 'success',
       message: `${proposedUpdates.length} cells programmatically verified and updated.`
     })).setMimeType(ContentService.MimeType.JSON);
-    
+
   } catch (error) {
     return createErrorResponse(error.toString());
   }
@@ -163,7 +163,7 @@ function getCellAddress(row, col) {
 
 ## 3. Local Dashboard Integration (The "Maker-Checker" UI)
 
-To use this loop in your project, we will write a local web client. 
+To use this loop in your project, we will write a local web client.
 
 1. **Connect**: Input the Google Web App URL in your local web panel.
 2. **Retrieve**: The client fetches the cell grid via the Web App.

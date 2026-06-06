@@ -5,39 +5,39 @@
   --bg-primary: #0a0b0e;
   --bg-secondary: #12141c;
   --bg-tertiary: #1a1d29;
-  
+
   --border-color: #242936;
   --border-hover: #363d50;
-  
+
   --text-primary: #f0f2f5;
   --text-secondary: #9aa2b5;
   --text-muted: #5e6677;
-  
+
   --accent: #6366f1; /* Neon Purple-Indigo */
   --accent-glow: rgba(99, 102, 241, 0.2);
   --accent-hover: #4f46e5;
-  
+
   /* Status Colors */
   --color-locked: #ff3366; /* Neon Crimson */
   --color-locked-bg: rgba(255, 51, 102, 0.1);
   --color-locked-border: rgba(255, 51, 102, 0.3);
-  
+
   --color-readable: #00b4d8; /* Neon Blue */
   --color-readable-bg: rgba(0, 180, 216, 0.1);
   --color-readable-border: rgba(0, 180, 216, 0.3);
-  
+
   --color-writable: #00e676; /* Neon Green */
   --color-writable-bg: rgba(0, 230, 118, 0.1);
   --color-writable-border: rgba(0, 230, 118, 0.3);
-  
+
   --color-hidden: #ff9100; /* Neon Orange */
   --color-hidden-bg: rgba(255, 145, 0, 0.1);
   --color-hidden-border: rgba(255, 145, 0, 0.3);
-  
+
   /* Font Stacks */
   --font-sans: 'Inter', 'Outfit', system-ui, sans-serif;
   --font-mono: 'Fira Code', monospace;
-  
+
   /* Borders & Shadows */
   --radius-sm: 6px;
   --radius-md: 10px;

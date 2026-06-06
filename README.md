@@ -1,6 +1,6 @@
 # DocAccess: Co-Pilot Maker-Checker Guardrails
 
-An enterprise MVP co-pilot dashboard designed for regulated financial workflows. It demonstrates how to apply a strict **Maker-Checker (Four-Eyes) Principle** directly to AI-driven document and spreadsheet modification loops. 
+An enterprise MVP co-pilot dashboard designed for regulated financial workflows. It demonstrates how to apply a strict **Maker-Checker (Four-Eyes) Principle** directly to AI-driven document and spreadsheet modification loops.
 
 The application offers two distinct modules:
 1. **Markdown Editor**: Uses inline HTML comment annotations to establish block-level permissions, featuring a regex-based pre-filter (redacting sensitive context) and post-verification parser (blocking rogue modifications to locked text).

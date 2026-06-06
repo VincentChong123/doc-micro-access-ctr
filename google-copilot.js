@@ -3,7 +3,7 @@
 /**
  * DocAccess: Secure Local Google Sheets API Co-Pilot
  * Uses official googleapis client. Authenticates via Application Default Credentials (ADC).
- * Fetches Sheet protections metadata directly, runs the LLM Maker loop, 
+ * Fetches Sheet protections metadata directly, runs the LLM Maker loop,
  * validates cell updates against protectedRanges, and pushes verified writes.
  */
 
@@ -63,23 +63,23 @@ async function main() {
 
     // 2. Fetch sheet values and protections metadata
     console.log(`Fetching spreadsheet data (ID: ${colors.dim}${spreadsheetId}${colors.reset})...`);
-    
+
     // Request metadata including sheets name and protectedRanges properties
     const sheetMetadataResponse = await sheets.spreadsheets.get({
       spreadsheetId: spreadsheetId,
       fields: 'sheets(properties,protectedRanges)'
     });
-    
+
     const spreadsheet = sheetMetadataResponse.data;
     const targetSheet = spreadsheet.sheets.find(s => s.properties.title === sheetName);
-    
+
     if (!targetSheet) {
       throw new Error(`Sheet named "${sheetName}" not found in this spreadsheet.`);
     }
 
     const sheetId = targetSheet.properties.sheetId;
     const protectedRanges = targetSheet.protectedRanges || [];
-    
+
     console.log(`Loaded Sheet: ${colors.bright}${sheetName}${colors.reset} (Protected Ranges Count: ${protectedRanges.length})`);
 
     // Fetch cell values
@@ -102,10 +102,10 @@ async function main() {
       for (let c = 0; c < maxCol; c++) {
         const val = rows[r]?.[c] !== undefined ? rows[r][c] : '';
         const isProtected = isCellProtected(r, c, protectedRanges);
-        
+
         // Emulate formula check based on string starting with '='
         const hasFormula = typeof val === 'string' && val.startsWith('=');
-        
+
         cellsData.push({
           row: r + 1,
           col: c + 1,
@@ -144,7 +144,7 @@ async function main() {
     // 5. Call LLM Maker API
     console.log(`\nCalling LLM Maker...`);
     let proposedUpdates = [];
-    
+
     if (useRogue) {
       // Emulate a rogue LLM proposing changes to protected ranges
       proposedUpdates = [
@@ -179,7 +179,7 @@ async function main() {
 
     // 7. Write Updates via Sheets API
     console.log(`\nWriting verified updates to Google Sheets...`);
-    
+
     const valueRanges = proposedUpdates.map(update => {
       const cellAddress = getCellAddress(update.row, update.col);
       return {
@@ -204,7 +204,7 @@ async function main() {
       spreadsheetId: spreadsheetId,
       range: `${sheetName}!A1:Z100`
     });
-    
+
     const finalRows = finalValuesResponse.data.values || [];
     const finalCells = [];
     for (let r = 0; r < maxRow; r++) {
@@ -239,7 +239,7 @@ function parseArgs() {
     rogue: false,
     status: false
   };
-  
+
   const args = process.argv.slice(2);
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--help' || args[i] === '-h') {
@@ -273,7 +273,7 @@ function printHelp() {
 function isCellProtected(row, col, protectedRanges) {
   const rIdx = row; // row is 0-based inside Google sheet metrics (wait! range index in API matches row indices)
   const cIdx = col;
-  
+
   for (let pr of protectedRanges) {
     const rng = pr.range;
     if (rng) {
@@ -281,7 +281,7 @@ function isCellProtected(row, col, protectedRanges) {
       const endRow = rng.endRowIndex !== undefined ? rng.endRowIndex : 1000;
       const startCol = rng.startColumnIndex !== undefined ? rng.startColumnIndex : 0;
       const endCol = rng.endColumnIndex !== undefined ? rng.endColumnIndex : 100;
-      
+
       if (rIdx >= startRow && rIdx < endRow && cIdx >= startCol && cIdx < endCol) {
         return true;
       }
@@ -296,7 +296,7 @@ function verifyUpdates(cells, proposedUpdates, protectedRanges) {
     if (!cell) {
       return { success: false, error: `Proposed coordinate row ${update.row}, col ${update.col} does not exist.` };
     }
-    
+
     // Check local properties
     if (cell.access === 'readonly') {
       return {
@@ -304,7 +304,7 @@ function verifyUpdates(cells, proposedUpdates, protectedRanges) {
         error: `Security Violation!\nLLM proposed writing to locked cell ${colors.bright}${cell.address}${colors.reset} which is inside a Protected Range.`
       };
     }
-    
+
     // Check against active protectedRanges metadata explicitly
     if (isCellProtected(update.row - 1, update.col - 1, protectedRanges)) {
       return {
@@ -312,7 +312,7 @@ function verifyUpdates(cells, proposedUpdates, protectedRanges) {
         error: `Security Firewall Interceptor!\nCell ${colors.bright}${cell.address}${colors.reset} lies within a Google protected range constraint.`
       };
     }
-    
+
     if (cell.formula) {
       return {
         success: false,
@@ -326,14 +326,14 @@ function verifyUpdates(cells, proposedUpdates, protectedRanges) {
 async function callGeminiAPI(systemInstruction, userPrompt, cellsData) {
   const apiKey = process.env.GEMINI_API_KEY;
   const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
-  
+
   if (!apiKey) {
     throw new Error('Environment variable GEMINI_API_KEY must be defined.');
   }
-  
+
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   const payloadPrompt = `User Request: ${userPrompt}\n\nSpreadsheet Cells:\n${JSON.stringify(cellsData, null, 2)}`;
-  
+
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -342,21 +342,21 @@ async function callGeminiAPI(systemInstruction, userPrompt, cellsData) {
       systemInstruction: { parts: [{ text: systemInstruction }] }
     })
   });
-  
+
   if (!response.ok) {
     const err = await response.json();
     throw new Error(`Gemini API Error: ${err.error?.message || 'Unknown'}`);
   }
-  
+
   const result = await response.json();
   let text = result.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Empty response from model.');
-  
+
   text = text.trim();
   if (text.startsWith('```')) {
     text = text.replace(/^```[a-zA-Z]*/, '').replace(/```$/, '').trim();
   }
-  
+
   const parsed = JSON.parse(text);
   return parsed.updates || [];
 }
@@ -364,30 +364,30 @@ async function callGeminiAPI(systemInstruction, userPrompt, cellsData) {
 function printGrid(cellsData, rows, cols) {
   console.log(`\nSpreadsheet Active Grid View:`);
   console.log(`---------------------------------------------------------------------------------`);
-  
+
   let headerStr = "    | ";
   for (let c = 1; c <= cols; c++) {
     headerStr += `${getColLetter(c).padEnd(16)} | `;
   }
   console.log(headerStr);
   console.log(`---------------------------------------------------------------------------------`);
-  
+
   for (let r = 1; r <= rows; r++) {
     let rowStr = `${r.toString().padEnd(3)} | `;
     for (let c = 1; c <= cols; c++) {
       const cell = cellsData.find(cellObj => cellObj.row === r && cellObj.col === c);
       let val = '';
       let color = colors.reset;
-      
+
       if (cell) {
         val = cell.value;
         if (cell.access === 'writable') color = colors.green;
         else color = colors.yellow; // protected
       }
-      
+
       let str = val !== null ? val.toString() : '';
       if (str.length > 16) str = str.substring(0, 13) + '...';
-      
+
       rowStr += `${color}${str.padEnd(16)}${colors.reset} | `;
     }
     console.log(rowStr);

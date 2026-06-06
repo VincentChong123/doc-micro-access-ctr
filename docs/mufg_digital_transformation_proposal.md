@@ -1,13 +1,13 @@
 # Digital Transformation Proposal: Secure Spreadsheet AI Co-Pilot (DocAccess)
 
-**Prepared for**: Digital Strategy Division, APAC, MUFG Bank  
+**Prepared for**: Digital Strategy Division, APAC, MUFG Bank
 **Objective**: Safe deployment of Generative AI spreadsheet co-pilots across MUFG and ASEAN partner banks (Krungsri, Danamon) utilizing native cloud protections and decoupled API gateways.
 
 ---
 
 ## 1. Executive Summary
 
-Generative AI offers massive efficiency gains for banking workflows (credit analysis, risk forecasting, valuation modeling). However, deployment is bottlenecked by data security, model hallucination, and high seat-licensing costs. 
+Generative AI offers massive efficiency gains for banking workflows (credit analysis, risk forecasting, valuation modeling). However, deployment is bottlenecked by data security, model hallucination, and high seat-licensing costs.
 
 **DocAccess** solves this by establishing a **Zero-Trust, Maker-Checker Architecture**. Instead of deploying expensive, custom desktop software, we enforce security at the data layer using native cloud permissions (Excel Online sheet-protection exceptions). The LLM (Maker) can read only approved context and write only to designated cells. This proposal outlines the strategic roadmap to evaluate, adopt, and roll out this framework across MUFG APAC and partner banks.
 
@@ -73,7 +73,7 @@ gantt
     title Phased Roll-out Roadmap (6 Months)
     dateFormat  X
     axisFormat %d
-    
+
     section Phase 1
     Sandbox & Security Audit :active, 0, 30
     section Phase 2
