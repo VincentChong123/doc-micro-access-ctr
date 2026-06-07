@@ -68,7 +68,7 @@ export async function addSheet(spreadsheetId, title) {
 }
 
 /**
- * Sets a Developer Metadata key-value pair on the spreadsheet (PROJECT visibility).
+ * Sets a Developer Metadata key-value pair on the spreadsheet (DOCUMENT visibility).
  * @param {string} spreadsheetId
  * @param {string} key
  * @param {string} value
@@ -85,7 +85,7 @@ export async function setDeveloperMetadata(spreadsheetId, key, value) {
                         metadataKey: key,
                         metadataValue: value,
                         location: { spreadsheet: true },
-                        visibility: 'PROJECT'
+                        visibility: 'DOCUMENT'
                     }
                 }
             }]
@@ -104,7 +104,7 @@ export async function getDeveloperMetadata(spreadsheetId) {
     const response = await sheets.spreadsheets.developerMetadata.search({
         spreadsheetId,
         requestBody: {
-            dataFilters: [{ developerMetadataLookup: { visibility: 'PROJECT' } }]
+            dataFilters: [{ developerMetadataLookup: { visibility: 'DOCUMENT' } }]
         }
     });
     return response.data.matchedDeveloperMetadata || [];

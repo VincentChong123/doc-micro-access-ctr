@@ -28,7 +28,7 @@ allFiles.forEach(file => {
     // Only process text files (skip binaries if any)
     if (file.match(/\.(md|js|mjs|json|jsonl)$/i)) {
         let content = fs.readFileSync(file, 'utf8');
-        
+
         if (content.match(/global-bank/i)) {
             // Replace email/domain domains
             content = content.replace(/global-bank\.jp/g, 'global-bank.local');
@@ -36,7 +36,7 @@ allFiles.forEach(file => {
             content = content.replace(/GLOBAL-BANK/g, 'GLOBAL-BANK');
             // Replace lowercase
             content = content.replace(/global-bank/g, 'global-bank');
-            
+
             fs.writeFileSync(file, content, 'utf8');
             console.log(`Redacted: ${file}`);
             modifiedCount++;

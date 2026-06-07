@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug manage_schema_metadata.mjs",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/scripts/manage_schema_metadata.mjs"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Current JS/MJS File",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${file}"
+    }
+  ]
+}
