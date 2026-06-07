@@ -1,7 +1,7 @@
 # Digital Transformation Proposal: Secure Spreadsheet AI Co-Pilot (DocAccess)
 
-**Prepared for**: Digital Strategy Division, APAC, MUFG Bank
-**Objective**: Safe deployment of Generative AI spreadsheet co-pilots across MUFG and ASEAN partner banks (Krungsri, Danamon) utilizing native cloud protections and decoupled API gateways.
+**Prepared for**: Digital Strategy Division, APAC, GLOBAL-BANK Bank
+**Objective**: Safe deployment of Generative AI spreadsheet co-pilots across GLOBAL-BANK and ASEAN partner banks (Krungsri, Danamon) utilizing native cloud protections and decoupled API gateways.
 
 ---
 
@@ -9,7 +9,7 @@
 
 Generative AI offers massive efficiency gains for banking workflows (credit analysis, risk forecasting, valuation modeling). However, deployment is bottlenecked by data security, model hallucination, and high seat-licensing costs.
 
-**DocAccess** solves this by establishing a **Zero-Trust, Maker-Checker Architecture**. Instead of deploying expensive, custom desktop software, we enforce security at the data layer using native cloud permissions (Excel Online sheet-protection exceptions). The LLM (Maker) can read only approved context and write only to designated cells. This proposal outlines the strategic roadmap to evaluate, adopt, and roll out this framework across MUFG APAC and partner banks.
+**DocAccess** solves this by establishing a **Zero-Trust, Maker-Checker Architecture**. Instead of deploying expensive, custom desktop software, we enforce security at the data layer using native cloud permissions (Excel Online sheet-protection exceptions). The LLM (Maker) can read only approved context and write only to designated cells. This proposal outlines the strategic roadmap to evaluate, adopt, and roll out this framework across GLOBAL-BANK APAC and partner banks.
 
 ---
 
@@ -77,7 +77,7 @@ gantt
     section Phase 1
     Sandbox & Security Audit :active, 0, 30
     section Phase 2
-    APAC Pilot (MUFG SG)     : 30, 60
+    APAC Pilot (GLOBAL-BANK SG)     : 30, 60
     section Phase 3
     Partner Bank Enablement (Krungsri/Danamon) : 60, 120
     section Phase 4
@@ -89,7 +89,7 @@ gantt
 *   **Milestone**: Approved Security Architecture sign-off.
 
 ### Phase 2: Pilot Roll-out (Month 2)
-*   **Goals**: Deploy the CLI co-pilot to a pilot group of 20 credit analysts in the MUFG APAC Singapore branch.
+*   **Goals**: Deploy the CLI co-pilot to a pilot group of 20 credit analysts in the GLOBAL-BANK APAC Singapore branch.
 *   **Milestone**: Complete 50 credit memo evaluations with zero security breaches.
 
 ### Phase 3: Partner Bank Enablement (Months 3-4)

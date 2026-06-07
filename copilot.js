@@ -49,7 +49,7 @@ const MOCK_SHEET_DATA = {
     { row: 4, col: 4, value: "Fixed MAS statutory assessment fee", formula: null, access: "readonly", address: "D4" },
 
     { row: 5, col: 1, value: "API Vault Secret Key", formula: null, access: "readonly", address: "A5" },
-    { row: 5, col: 2, value: "mufg-sec-key-88992-abc", formula: null, access: "hidden", address: "B5" },
+    { row: 5, col: 2, value: "global-bank-sec-key-88992-abc", formula: null, access: "hidden", address: "B5" },
     { row: 5, col: 3, value: "[REDACTED - HIDDEN DATA]", formula: null, access: "hidden", address: "C5" },
     { row: 5, col: 4, value: "Credentials for Sandbox API connections", formula: null, access: "readonly", address: "D5" },
 

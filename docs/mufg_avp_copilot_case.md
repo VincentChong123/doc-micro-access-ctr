@@ -1,4 +1,4 @@
-# MUFG AVP Case Study: Secure Spreadsheet AI Co-Pilot
+# GLOBAL-BANK AVP Case Study: Secure Spreadsheet AI Co-Pilot
 
 This case study outlines the architecture of an enterprise-grade AI spreadsheet co-pilot tailored for banking operations (such as credit analysis, digital strategy, or risk forecasting). It models how to implement a secure, low-overhead **Maker-Checker workflow** using native Google Workspace protections and command-line execution.
 
@@ -66,7 +66,7 @@ The local client running under `llm@gmail.com` executes the loop:
 
 ## 3. Interview Value Proposition (AVP Business Transformation)
 
-When interviewing for the **AVP, Business Transformation** role at MUFG, this architecture highlights critical skills:
+When interviewing for the **AVP, Business Transformation** role at GLOBAL-BANK, this architecture highlights critical skills:
 
 1.  **Operational Risk Mitigation**:
     You address the key compliance objection to AI: *"How do we prevent the LLM from corrupting audited spreadsheets?"* Instead of trusting the LLM to follow prompt instructions, you use Google’s cloud IAM as a physical gatekeeper.

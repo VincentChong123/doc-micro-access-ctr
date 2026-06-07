@@ -15,7 +15,7 @@ async function main() {
 
         // Row 2: Mock Data (So you can immediately see the UI in AppSheet)
         [
-            "MUFG-RNG-20260605-001",
+            "GLOBAL-BANK-RNG-20260605-001",
             "https://drive.google.com/file/d/mock-pdf-12345/view",
             "FALSE",
             "Pending"

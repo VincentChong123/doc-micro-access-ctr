@@ -40,9 +40,9 @@ async function main() {
 
             // Row 2: Mock Data
             [
-                `MUFG-RNG-${dateStr}-001`,
-                "owner@mufg.jp",
-                "manager@mufg.jp",
+                `GLOBAL-BANK-RNG-${dateStr}-001`,
+                "owner@global-bank.local",
+                "manager@global-bank.local",
                 "Hi Boss, please review the Toyota deal.",
                 "FALSE",
                 "https://drive.google.com/file/d/mock-pdf-12345/view",

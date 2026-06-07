@@ -8,13 +8,13 @@
 
 This business case evaluates the financial and operational feasibility of deploying the **DocAccess Co-Pilot Gateway** versus standard enterprise-wide **Microsoft Copilot for Microsoft 365** seat licensing.
 
-From a management consulting perspective, the core thesis is that **horizontal AI licensing creates a significant cost tax with high compliance risk**. By decoupling the AI model via a centralized API gateway and utilizing native spreadsheet range protections, MUFG and its partner banks can achieve **a 92% reduction in software licensing costs** while programmatically eliminating model corruption and data leakage risks.
+From a management consulting perspective, the core thesis is that **horizontal AI licensing creates a significant cost tax with high compliance risk**. By decoupling the AI model via a centralized API gateway and utilizing native spreadsheet range protections, GLOBAL-BANK and its partner banks can achieve **a 92% reduction in software licensing costs** while programmatically eliminating model corruption and data leakage risks.
 
 ---
 
 ## 2. Financial Model & ROI (TCO Comparison)
 
-To illustrate the commercial rationale, we model a pilot deployment for **1,000 analysts** across MUFG APAC, Krungsri, and Danamon.
+To illustrate the commercial rationale, we model a pilot deployment for **1,000 analysts** across GLOBAL-BANK APAC, Krungsri, and Danamon.
 
 ### A. Total Cost of Ownership (TCO) - Annual Run Rate
 

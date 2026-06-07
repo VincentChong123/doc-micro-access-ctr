@@ -1,17 +1,17 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "MUFG Ringisho Automation API",
+        "title": "GLOBAL-BANK Ringisho Automation API",
         "description": "API-First design specification for the Ringisho Approval Workflow, covering Tracking Ledger updates and Draft submissions.",
         "version": "2026-06-06",
         "contact": {
             "name": "Enterprise Architecture Team",
-            "email": "architecture@mufg.jp"
+            "email": "architecture@global-bank.local"
         }
     },
     "servers": [
         {
-            "url": "https://api.internal.mufg.jp/v1",
+            "url": "https://api.internal.global-bank.local/v1",
             "description": "Production Server"
         },
         {
@@ -82,7 +82,7 @@
                     "case_ref_id": {
                         "type": "string",
                         "x-google-sheet-column": "A",
-                        "pattern": "^MUFG-RNG-\\\\d{8}-\\\\d{3}$",
+                        "pattern": "^GLOBAL-BANK-RNG-\\\\d{8}-\\\\d{3}$",
                         "description": "The unique deterministic case ID."
                     },
                     "Draft_Owner_Email": {

@@ -14,7 +14,7 @@ async function main() {
             console.log("No metadata found. Injecting OpenAPI schema pointer...");
 
             await setDeveloperMetadata(SPREADSHEET_ID, "schema_version", "2026-06-06");
-            await setDeveloperMetadata(SPREADSHEET_ID, "schema_url", "https://api.internal.mufg.jp/schemas/openapi3-ringisho-spec.json");
+            await setDeveloperMetadata(SPREADSHEET_ID, "schema_url", "https://api.internal.global-bank.local/schemas/openapi3-ringisho-spec.json");
 
             console.log("✅ Successfully embedded 'PROJECT' level schema metadata.");
 

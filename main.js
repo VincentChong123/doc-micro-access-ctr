@@ -3,7 +3,7 @@
  */
 
 // --- SAMPLE DATA CONFIGURATION ---
-const SAMPLE_MARKDOWN = `# MUFG Digital Strategy Sandbox Spec
+const SAMPLE_MARKDOWN = `# GLOBAL-BANK Digital Strategy Sandbox Spec
 <!-- start-readonly -->
 ### Document Reference: RF-2026-SG
 Status: APPROVED (Risk Operations)
@@ -14,7 +14,7 @@ This is a draft specification for the transaction banking ledger connection.
 
 <!-- start-hidden -->
 CREDENTIALS_VAULT:
-  API_PRIVATE_KEY: "mufg-sec-key-88992-abc"
+  API_PRIVATE_KEY: "global-bank-sec-key-88992-abc"
   ENC_SALT: "sha256-salt-99x"
 <!-- end-hidden -->
 
@@ -67,7 +67,7 @@ const MOCK_SHEET_DATA = {
 
     // Row 5 - API Vault Secrets (hidden/redacted)
     { row: 5, col: 1, value: "API Vault Secret Key", formula: null, access: "readonly", address: "A5" },
-    { row: 5, col: 2, value: "mufg-sec-key-88992-abc", formula: null, access: "hidden", address: "B5" },
+    { row: 5, col: 2, value: "global-bank-sec-key-88992-abc", formula: null, access: "hidden", address: "B5" },
     { row: 5, col: 3, value: "[REDACTED - HIDDEN DATA]", formula: null, access: "hidden", address: "C5" },
     { row: 5, col: 4, value: "Credentials for Sandbox API connections", formula: null, access: "readonly", address: "D5" },
 

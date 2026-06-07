@@ -1,6 +1,6 @@
 # Executive Pitch: Secure Spreadsheet Co-Pilot Gateway
 
-**Target Audience**: Mr. Yip (Managing Director, Head of Asia Digital Strategy, MUFG)
+**Target Audience**: Mr. Yip (Managing Director, Head of Asia Digital Strategy, GLOBAL-BANK)
 **Proposed Concept**: Zero-Trust, API-Decoupled Maker-Checker Spreadsheet Co-Pilot
 **Pillars**: Data Security, Cost Rationalization, Operational Efficiency, User Friction, and Scalability.
 
@@ -29,7 +29,7 @@
 *   **The Value**: *"By routing edits through our local gateway, we are not locked into Microsoft or Google. We can swap the underlying model (Gemini, Claude, or local private LLMs) behind the API without changing a single cell in the front-office worksheets."*
 
 ### B. Scalability for Emerging ASEAN Partner Banks
-*   **The Value**: *"MUFG's partner banks in the region (Krungsri, Danamon) have varying IT budgets and security maturity. A heavy enterprise software roll-out takes years of security reviews. This lightweight gateway integrates with their existing Office 365 cloud subscriptions, allowing instant enablement at minimal friction."*
+*   **The Value**: *"GLOBAL-BANK's partner banks in the region (Krungsri, Danamon) have varying IT budgets and security maturity. A heavy enterprise software roll-out takes years of security reviews. This lightweight gateway integrates with their existing Office 365 cloud subscriptions, allowing instant enablement at minimal friction."*
 
 ### C. Compliance-Ready Audit Trail
 *   **The Value**: *"Every change made by the AI is logged under the `llm-agent` account in the spreadsheet's native version history. Internal audit has a clear, immutable record of what the AI wrote, and what the human checker verified."*
