@@ -4,7 +4,7 @@
 The most significant bottleneck in Tier-1 Banking operations (specifically the *Ringisho* approval process) is not the final executive sign-off, but the **sequential drafting phase**. By transitioning from rigid, legacy State-Based Web UIs to a **Real-Time Collaborative Drafting Architecture**, we reduce the document lifecycle from weeks to days. This strategy bridges the gap between modern cloud collaboration, AI augmentation, and strict Japanese banking compliance.
 
 ## 2. The Legacy Bottleneck: Sequential "Ping-Pong"
-Legacy banking Web UIs (Salesforce, Pega) rely on strict relational databases using **Pessimistic Record Locking**. 
+Legacy banking Web UIs (Salesforce, Pega) rely on strict relational databases using **Pessimistic Record Locking**.
 - If a Junior Analyst opens the form to edit numbers, the Senior RM is locked out.
 - This forces the business to revert to "Shadow IT" (emailing offline Excel files sequentially).
 - The result is a 4-to-7 day "email ping-pong" delay purely to establish a finalized draft.

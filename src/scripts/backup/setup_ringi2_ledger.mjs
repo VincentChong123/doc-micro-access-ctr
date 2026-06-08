@@ -1,12 +1,19 @@
 import dotenv from 'dotenv';
+import fs from 'fs';
+import YAML from 'yaml';
 import { updateRange, addSheet } from '../services/sheets.service.js';
 
 dotenv.config();
 
+// Load YAML Config
+const file = fs.readFileSync('./src/config/app.yaml', 'utf8');
+const config = YAML.parse(file);
+
 async function main() {
     // Targeting the ringi2 sheet
     const SPREADSHEET_ID = process.env.RINGI2_SPREADSHEET_ID;
-    const SHEET_NAME = 'Tracking_Ledger';
+    const SHEET_NAME = config.google_sheets.tabs.central_ledger; // Reads from YAML
+
 
     try {
         console.log(`Creating new tab '${SHEET_NAME}' in ringi2 sheet...`);

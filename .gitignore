@@ -7,3 +7,5 @@ credentials.json
 **/__pycache__
 *.pyc
 *.pyo
+.antigravitycli/0c98b3b9-3877-457f-bb83-35eecb04f686.json
+/minio-data

@@ -1,0 +1,11 @@
+# Google Sheets Core Configuration
+google_sheets:
+  tabs:
+    drafting_canvas: "Ringisho" # The main UI tab for the RM
+    metadata_tab: "__Metadata" # Hidden tab for IT Support debugging
+    central_ledger: "Tracking_Ledger" # The immutable Maker/Checker log
+
+  # OpenAPI Schema Sync Settings
+  schema_mapping:
+    default_version: "2026-06-06"
+    domain: "global-bank.local" # Internal VPC domain for security

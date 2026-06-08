@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My API Terminal MVP</title>
+    <!-- 1. Import xterm.js CSS and JS from a CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: white;
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #terminal-container {
+            width: 800px;
+            height: 400px;
+            border-radius: 8px;
+            padding: 10px;
+            background: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Interactive API Tutorial Sandbox</h2>
+    <div id="terminal-container"></div>
+
+    <script>
+        // 2. Initialize the Terminal                                                         
+        const term = new Terminal({
+            cursorBlink: true,
+            theme: { background: '#000000' }
+        });
+
+        // Attach it to the HTML div                                                          
+        term.open(document.getElementById('terminal-container'));
+
+        // Write a welcome message                                                            
+        term.writeln('Welcome to the API Sandbox!');
+        term.writeln('Type \x1b[1;32m"help"\x1b[0m to see available commands.');
+        term.write('\r\n$ ');
+
+        let currentLine = "";
+
+        // 3. Listen for keystrokes                                                           
+        term.onKey(e => {
+            const ev = e.domEvent;
+            const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
+
+            if (ev.keyCode === 13) { // User pressed "Enter"                                  
+                term.writeln('');
+                processCommand(currentLine.trim());
+                currentLine = "";
+            } else if (ev.keyCode === 8) { // User pressed "Backspace"                        
+                if (currentLine.length > 0) {
+                    currentLine = currentLine.substring(0, currentLine.length - 1);
+                    term.write('\b \b');
+                }
+            } else if (printable) { // User typed a normal character                          
+                currentLine += e.key;
+                term.write(e.key);
+            }
+        });
+
+        // 4. The "Dummy Backend" Logic                                                       
+        function processCommand(cmd) {
+            if (cmd === "") {
+                // Do nothing                                                                 
+            } else if (cmd === "help") {
+                term.writeln('Available commands:');
+                term.writeln('  \x1b[36mget user\x1b[0m   - Fetch user API data');
+                term.writeln('  \x1b[36mclear\x1b[0m      - Clear the terminal');
+            } else if (cmd === "get user") {
+                term.writeln('\x1b[33mFetching data from API...\x1b[0m');
+                // Fake API JSON response                                                     
+                term.writeln('{\r\n  "id": "usr_123",\r\n  "name": "Jane Doe",\r\n  "status": "active"\r\n}');                                                                                
+            } else if (cmd === "clear") {
+                term.clear();
+            } else {
+                term.writeln('\x1b[31mError:\x1b[0m Command not found: ' + cmd);
+            }
+            term.write('\r\n$ ');
+        }
+    </script>
+</body>
+
+</html>

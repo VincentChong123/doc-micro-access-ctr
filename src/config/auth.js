@@ -10,3 +10,9 @@ export async function getSheetsClient(scopes = ['https://www.googleapis.com/auth
     const authClient = await auth.getClient();
     return google.sheets({ version: 'v4', auth: authClient });
 }
+
+export async function getDriveClient(scopes = ['https://www.googleapis.com/auth/drive']) {
+    const auth = new GoogleAuth({ scopes });
+    const authClient = await auth.getClient();
+    return google.drive({ version: 'v3', auth: authClient });
+}
