@@ -1,0 +1,16 @@
+{
+  "name": "ringisho-api-gateway",
+  "version": "1.0.0",
+  "description": "Enterprise API Gateway and Reverse Proxy",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-proxy-middleware": "^3.0.0",
+    "swagger-ui-express": "^5.0.0"
+  }
+}
