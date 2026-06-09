@@ -2,7 +2,7 @@ import express from 'express';
 import { exec } from 'child_process';
 // Ensure .env is loaded
 import dotenv from 'dotenv';
-dotenv.config({ path: '../../.env' }); 
+dotenv.config({ path: '../../.env' });
 dotenv.config();
 
 const app = express();
@@ -26,10 +26,10 @@ app.post('/api/llm/generate', async (req, res) => {
     console.log(`\n🔔 [EXPRESS PROXY] Request received from Google Sheets!`);
     console.log(`👤 User: ${user}`);
     console.log(`💬 Prompt: "${query}"`);
-    
+
     try {
         console.log(`🤖 Routing prompt to Active Antigravity (agy-cli) Session via IPC...`);
-        
+
         // 1. Write the request to a file for the Agent to read
         const fs = await import('fs');
         const requestId = Date.now().toString();
@@ -42,14 +42,14 @@ app.post('/api/llm/generate', async (req, res) => {
         let agentFinalOutput = "";
         for (let i = 0; i < 25; i++) {
             await new Promise(r => setTimeout(r, 1000)); // Wait 1 second
-            
+
             if (fs.existsSync('./agent_response.json')) {
                 const responseData = JSON.parse(fs.readFileSync('./agent_response.json', 'utf8'));
                 // Removed strict ID check for easier MVP testing
                 agentFinalOutput = responseData.answer;
                 fs.unlinkSync('./agent_response.json'); // Clean up
-                fs.unlinkSync('./agent_request.json'); // Clean 
-                console.log(`📤 Deleted agent_*.json`);        
+                fs.unlinkSync('./agent_request.json'); // Clean
+                console.log(`📤 Deleted agent_*.json`);
                 break;
             }
         }
@@ -76,10 +76,10 @@ app.post('/api/workflow/approve', (req, res) => {
     const { action, user, data } = req.body;
     console.log(`\n🔔 [WORKFLOW] Approval Request received from Google Sheets!`);
     console.log(`👤 Requested by: ${user}`);
-    
+
     // 1. Instantly respond so Google Sheets doesn't timeout
     res.status(200).json({ status: "success", message: "PDF generation started in background." });
-    
+
     // 2. Kick off the PDF script asynchronously
     console.log(`📄 Kicking off generate_approval_pdf.mjs...`);
     exec('node ./src/scripts/generate_approval_pdf.mjs', (error, stdout, stderr) => {

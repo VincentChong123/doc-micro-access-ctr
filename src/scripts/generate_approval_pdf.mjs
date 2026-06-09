@@ -28,7 +28,7 @@ async function main() {
         fileId: SPREADSHEET_ID,
         fields: 'revisions(id, modifiedTime, originalFilename)'
     });
-    
+
     // Get the absolute latest revision as the target state
     const revisions = revisionsRes.data.revisions;
     const latestRevision = revisions[revisions.length - 1];
@@ -40,7 +40,7 @@ async function main() {
     const sheets = google.sheets({ version: 'v4', auth: authClient });
     const sheetMetadata = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
     const targetSheet = sheetMetadata.data.sheets.find(s => s.properties.title === 'Ringisho');
-    
+
     if (!targetSheet) {
         console.error("❌ Error: Could not find a tab named 'Ringisho' in the spreadsheet.");
         process.exit(1);
@@ -51,7 +51,7 @@ async function main() {
     console.log(`⬇️  Downloading PDF for Ringisho!B1:E11...`);
     // Added printnotes=false to ensure the cell instructions do not appear in the final PDF
     const exportUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=pdf&gid=${gid}&range=B1:E11&gridlines=false&printnotes=false`;
-    
+
     const token = await authClient.getAccessToken();
     const pdfResponse = await fetch(exportUrl, {
         headers: { 'Authorization': `Bearer ${token.token}` }
@@ -63,17 +63,17 @@ async function main() {
     // 5. PDF-LIB: Stamp the Metadata
     console.log("📝 Embedding Revision Metadata into PDF...");
     const pdfDoc = await PDFDocument.load(rawPdfBuffer);
-    
+
     // Standard Fields
     pdfDoc.setTitle(`Approval Artifact: ${REVISION_NAME}`);
     pdfDoc.setAuthor('Antigravity Node.js System');
-    
+
     // You can use the 'Subject' field to store long strings like URLs or IDs
     pdfDoc.setSubject(`Source Spreadsheet ID: ${SPREADSHEET_ID} | Revision ID: ${systemRevisionId}`);
-    
+
     // Add the Spreadsheet ID to the Keywords
     pdfDoc.setKeywords([
-        `ApprovalName: ${REVISION_NAME}`, 
+        `ApprovalName: ${REVISION_NAME}`,
         `SystemRevisionID: ${systemRevisionId}`,
         `SpreadsheetID: ${SPREADSHEET_ID}`
     ]);
@@ -81,12 +81,12 @@ async function main() {
     // 6. Save locally (Ready for MinIO!)
     const finalPdfBytes = await pdfDoc.save();
     const outputPath = `./src/minio-data/${REVISION_NAME}.pdf`;
-    
+
     // Ensure the folder exists before saving
     if (!fs.existsSync('./src/minio-data')) fs.mkdirSync('./src/minio-data', { recursive: true });
-    
+
     fs.writeFileSync(outputPath, finalPdfBytes);
-    
+
     console.log(`🎉 Success! PDF saved with embedded metadata at: ${outputPath}`);
 }
 

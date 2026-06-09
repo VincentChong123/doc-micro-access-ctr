@@ -59,9 +59,9 @@ async function comparePDFText() {
         const pageNum = i + 1;
 
         const differences = Diff.diffWords(text1, text2);
-        
+
         // Ignore whitespace-only changes
-        const hasRealChanges = differences.some(part => 
+        const hasRealChanges = differences.some(part =>
             (part.added || part.removed) && part.value.trim().length > 0
         );
 
@@ -85,18 +85,18 @@ async function comparePDFText() {
 /*
    To perform Pixel-by-Pixel Image Diffing in Node.js, you need 'pdf2pic', 'pngjs', and 'pixelmatch'.
    Note: 'pdf2pic' requires 'ghostscript' and 'graphicsmagick' to be installed on your Linux/Mac OS.
-   
+
    async function generateVisualRedline(buffer1, buffer2) {
        import { fromBuffer } from "pdf2pic";
        import pixelmatch from "pixelmatch";
        import { PNG } from "pngjs";
-       
+
        const options = { density: 100, format: "png", width: 800, height: 1000 };
-       
+
        // Convert Page 1 of both PDFs to Images
        const img1 = await fromBuffer(buffer1, options)(1);
        const img2 = await fromBuffer(buffer2, options)(1);
-       
+
        // Load them into PNG.js
        const png1 = PNG.sync.read(fs.readFileSync(img1.path));
        const png2 = PNG.sync.read(fs.readFileSync(img2.path));
@@ -105,7 +105,7 @@ async function comparePDFText() {
 
        // Run the cryptographic pixel diff
        const numDiffPixels = pixelmatch(png1.data, png2.data, diff.data, width, height, { threshold: 0.1 });
-       
+
        if (numDiffPixels > 0) {
            fs.writeFileSync('Delta_Redline_Page1.png', PNG.sync.write(diff));
            console.log(`Generated Delta_Redline_Page1.png showing highlighted changes.`);

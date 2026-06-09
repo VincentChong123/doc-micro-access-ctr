@@ -1,0 +1,25 @@
+  ### The Modern Microservices Structure                                                                       
+                                                                                                               
+    /ringisho-enterprise-platform/         <-- Your Master Project Folder                                      
+    │                                                                                                          
+    ├── /clients/                          <-- ALL FRONTENDS                                                   
+    │   └── /google-sheets-ui/             <-- (Your Apps Script Code)                                         
+    │       ├── .clasp.json                                                                                    
+    │       └── Code.js                    <-- Only UI buttons and UrlFetchApp logic                           
+    │                                                                                                          
+    ├── /gateway/                          <-- THE TRAFFIC COP                                                 
+    │   └── /api-gateway/                  <-- (Your Express Proxy)                                            
+    │       ├── package.json                                                                                   
+    │       └── server.mjs                 <-- ONLY contains proxy middleware & routing                        
+    │                                                                                                          
+    ├── /services/                         <-- THE BACKEND WORKERS                                             
+    │   ├── /ai-service/                   <-- (Your Python Backend)                                           
+    │   │   ├── requirements.txt                                                                               
+    │   │   ├── main.py                    <-- FastAPI Uvicorn Server (Port 8000)                              
+    │   │   ├── /llm/                      <-- LangChain Logic                                                 
+    │   │   └── /rag/                      <-- Vector DB / Retrieval Logic                                     
+    │   │                                                                                                      
+    │   └── /document-service/             <-- (Your Node.js Utils)                                            
+    │       ├── package.json                                                                                   
+    │       ├── server.mjs                 <-- Express Server (Port 4000)                                      
+    │       └── /pdf-utils/                <-- generate_approval_pdf.mjs     

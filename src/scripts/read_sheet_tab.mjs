@@ -11,7 +11,7 @@ const config = YAML.parse(file);
 
 async function main() {
     const args = process.argv.slice(2);
-    
+
     // Check if user provided an argument
     if (args.length === 0) {
         console.error("❌ Error: Missing tab parameter.");
@@ -26,7 +26,7 @@ async function main() {
     const tabKey = args[0];
     const outputPath = args[1];
     const SPREADSHEET_ID = process.env.RINGI2_SPREADSHEET_ID;
-    
+
     // Resolve the actual Sheet Name from the YAML config using the provided key
     const SHEET_NAME = config.google_sheets.tabs[tabKey];
 
@@ -40,7 +40,7 @@ async function main() {
 
     try {
         const data = await readRange(SPREADSHEET_ID, `${SHEET_NAME}!A1:Z50`);
-        
+
         if (!data || data.length === 0) {
             console.log(`⚠️ The tab '${SHEET_NAME}' is empty or no data was found.`);
             return;
@@ -66,7 +66,7 @@ async function main() {
                     const colLetter = colIndexToLetter(cIndex);
                     const rowNumber = rIndex + 1; // Google Sheets rows are 1-indexed
                     const cellLocation = `${colLetter}${rowNumber}`;
-                    
+
                     resultJSON[cellLocation] = cellValue;
                 }
             });
@@ -91,7 +91,7 @@ async function main() {
             console.log(jsonString);
             console.log("---------------------------------");
         }
-        
+
     } catch (err) {
         console.error(`❌ Error reading ${SHEET_NAME}:`, err.message);
     }
