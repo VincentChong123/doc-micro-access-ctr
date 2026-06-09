@@ -1,25 +1,63 @@
-  ### The Modern Microservices Structure                                                                       
-                                                                                                               
-    /ringisho-enterprise-platform/         <-- Your Master Project Folder                                      
-    │                                                                                                          
-    ├── /clients/                          <-- ALL FRONTENDS                                                   
-    │   └── /google-sheets-ui/             <-- (Your Apps Script Code)                                         
-    │       ├── .clasp.json                                                                                    
-    │       └── Code.js                    <-- Only UI buttons and UrlFetchApp logic                           
-    │                                                                                                          
-    ├── /gateway/                          <-- THE TRAFFIC COP                                                 
-    │   └── /api-gateway/                  <-- (Your Express Proxy)                                            
-    │       ├── package.json                                                                                   
-    │       └── server.mjs                 <-- ONLY contains proxy middleware & routing                        
-    │                                                                                                          
-    ├── /services/                         <-- THE BACKEND WORKERS                                             
-    │   ├── /ai-service/                   <-- (Your Python Backend)                                           
-    │   │   ├── requirements.txt                                                                               
-    │   │   ├── main.py                    <-- FastAPI Uvicorn Server (Port 8000)                              
-    │   │   ├── /llm/                      <-- LangChain Logic                                                 
-    │   │   └── /rag/                      <-- Vector DB / Retrieval Logic                                     
-    │   │                                                                                                      
-    │   └── /document-service/             <-- (Your Node.js Utils)                                            
-    │       ├── package.json                                                                                   
-    │       ├── server.mjs                 <-- Express Server (Port 4000)                                      
-    │       └── /pdf-utils/                <-- generate_approval_pdf.mjs     
+  ### The Modern Microservices Structure
+
+    /ringisho-enterprise-platform/         <-- Your Master Project Folder
+    │
+    ├── /clients/                          <-- ALL FRONTENDS
+    │   └── /google-sheets-ui/             <-- (Your Apps Script Code)
+    │       ├── .clasp.json
+    │       └── Code.js                    <-- Only UI buttons and UrlFetchApp logic
+    │
+    ├── /gateway/                          <-- THE TRAFFIC COP
+    │   └── /api-gateway/                  <-- (Your Express Proxy)
+    │       ├── package.json
+    │       └── server.mjs                 <-- ONLY contains proxy middleware & routing
+    │
+    ├── /services/                         <-- THE BACKEND WORKERS
+    │   ├── /ai-service/                   <-- (Your Python Backend)
+    │   │   ├── requirements.txt
+    │   │   ├── main.py                    <-- FastAPI Uvicorn Server (Port 8000)
+    │   │   ├── /llm/                      <-- LangChain Logic
+    │   │   └── /rag/                      <-- Vector DB / Retrieval Logic
+    │   │
+    │   └── /document-service/             <-- (Your Node.js Utils)
+    │       ├── package.json
+    │       ├── server.mjs                 <-- Express Server (Port 4000)
+    │       └── /pdf-utils/                <-- generate_approval_pdf.mjs
+
+==
+
+/ringisho-enterprise-platform/
+├── .gitignore                         <-- CRITICAL: Prevent committing secrets/node_modules
+├── README.md                          <-- Root documentation for workspace setup
+│
+├── /clients/
+│   └── /google-sheets-ui/
+│       ├── .clasp.json
+│       ├── Code.js
+│       └── appsscript.json            <-- REQUIRED: Manifest file for Apps Script permissions
+│
+├── /gateway/
+│   └── /api-gateway/
+│       ├── .env.example               <-- Document required environment variables
+│       ├── Dockerfile                 <-- Containerize for cloud deployment (e.g., AWS ECS/GCP Cloud Run)
+│       ├── package.json
+│       └── server.mjs
+│
+├── /services/
+│   ├── /ai-service/
+│   │   ├── .env.example
+│   │   ├── Dockerfile                 <-- Containerize the Python/FastAPI environment
+│   │   ├── main.py
+│   │   ├── requirements.txt
+│   │   ├── /llm/
+│   │   └── /rag/
+│   │
+│   └── /document-service/
+│       ├── .env.example
+│       ├── Dockerfile                 <-- Containerize the Node.js PDF service
+│       ├── package.json
+│       ├── server.mjs
+│       └── /pdf-utils/
+│
+└── /infrastructure/                   <-- OPTIONAL BUT RECOMMENDED
+    └── /terraform/                    <-- Infrastructure as Code (IaC) to spin up cloud resources
