@@ -89,6 +89,13 @@ async function main() {
     fs.writeFileSync(outputPath, finalPdfBytes);
 
     console.log(`🎉 Success! PDF saved with embedded metadata at: ${outputPath}`);
+
+    // 7. Write the PDF Path back to Google Sheets!
+    console.log(`📝 Calling sheets_service to write path back to Ringisho!G1...`);
+    // Import dynamically so we don't break earlier script logic if it fails
+    const { js_function_update_cell } = await import('./sheets_service.mjs');
+    await js_function_update_cell('Ringisho', 'G1', outputPath);
+    console.log(`✅ Workflow Complete! Cell updated.`);
 }
 
 main().catch(console.error);
