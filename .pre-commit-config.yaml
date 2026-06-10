@@ -23,7 +23,10 @@ repos:
       - id: trufflehog
         name: TruffleHog (System)
         # Use the absolute path to your home directory binary
-        entry: /home/vin/.local/bin/trufflehog git file://. --since-commit HEAD --only-verified --fail
+        # entry: /home/vin/.local/bin/trufflehog git file://. --since-commit HEAD --only-verified --fail
+        # entry: /home/vin/.local/bin/trufflehog git file://. --since-commit HEAD --fail
+        # entry: /home/vin/.local/bin/trufflehog filesystem --fail .
+        entry: bash -c "git ls-files --exclude-standard --cached --others | xargs -d '\n' /home/vin/.local/bin/trufflehog filesystem --fail"
         language: system
         pass_filenames: false
   - repo: https://github.com/PyCQA/bandit
@@ -31,7 +34,7 @@ repos:
     hooks:
       - id: bandit
         # args: ["-lll"] # Only show high-severity issues (like SQLi)
-        args: [ "-lll" ] # Only show high-severity issues (like SQLi)
+        args: ["-lll"] # Only show high-severity issues (like SQLi)
         additional_dependencies:
           - pbr
   # -   repo: https://github.com/pre-commit/mirrors-pyright
@@ -51,4 +54,4 @@ repos:
         entry: pyright src_metadata
         language: system
         pass_filenames: false
-        types: [ python ]
+        types: [python]

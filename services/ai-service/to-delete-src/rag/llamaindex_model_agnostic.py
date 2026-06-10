@@ -27,7 +27,9 @@ class HuggingFaceInferenceAPIEmbedding(BaseEmbedding):
     _client: InferenceClient = PrivateAttr()
     _async_client: AsyncInferenceClient = PrivateAttr()
 
-    def __init__(self, model_name: str, api_key: Optional[str] = None, **kwargs: Any) -> None:
+    def __init__(
+        self, model_name: str, api_key: Optional[str] = None, **kwargs: Any
+    ) -> None:
         super().__init__(model_name=model_name, **kwargs)
         self.api_key = api_key
         self._client = InferenceClient(api_key=self.api_key)
@@ -62,7 +64,9 @@ class HuggingFaceInferenceAPIEmbedding(BaseEmbedding):
     async def _aget_query_embedding(self, query: str) -> List[float]:
         """Asynchronously get query embedding."""
         try:
-            result = await self._async_client.feature_extraction(query, model=self.model_name)
+            result = await self._async_client.feature_extraction(
+                query, model=self.model_name
+            )
             if isinstance(result, np.ndarray):
                 return result.tolist()
             return result
@@ -73,7 +77,9 @@ class HuggingFaceInferenceAPIEmbedding(BaseEmbedding):
     async def _aget_text_embedding(self, text: str) -> List[float]:
         """Asynchronously get text embedding."""
         try:
-            result = await self._async_client.feature_extraction(text, model=self.model_name)
+            result = await self._async_client.feature_extraction(
+                text, model=self.model_name
+            )
             if isinstance(result, np.ndarray):
                 return result.tolist()
             return result
@@ -82,7 +88,11 @@ class HuggingFaceInferenceAPIEmbedding(BaseEmbedding):
             raise
 
 
-def get_embedding_model(provider: Optional[str] = None, model_name: Optional[str] = None, embedding_dim: Optional[int] = None):
+def get_embedding_model(
+    provider: Optional[str] = None,
+    model_name: Optional[str] = None,
+    embedding_dim: Optional[int] = None,
+):
     """
     Returns a model-agnostic embedding model based on settings or provided arguments.
 
@@ -97,11 +107,16 @@ def get_embedding_model(provider: Optional[str] = None, model_name: Optional[str
         model = model_name or settings.embedding_model
         dim = embedding_dim or settings.embedding_dim
         logfire.info(f"Initializing Google GenAI Embedding: {model} (dim={dim})")
-        return GoogleGenAIEmbedding(model_name=model, embedding_config=EmbedContentConfig(output_dimensionality=dim))
+        return GoogleGenAIEmbedding(
+            model_name=model,
+            embedding_config=EmbedContentConfig(output_dimensionality=dim),
+        )
     elif provider == "huggingface":
         model = model_name or settings.hf_embedding_model
         logfire.info(f"Initializing Hugging Face Inference API Embedding: {model}")
-        return HuggingFaceInferenceAPIEmbedding(model_name=model, api_key=settings.hf_api_key)
+        return HuggingFaceInferenceAPIEmbedding(
+            model_name=model, api_key=settings.hf_api_key
+        )
     else:
         logfire.error(f"Unsupported embedding provider requested: {provider}")
         raise ValueError(f"Unsupported embedding provider: {provider}")
@@ -118,13 +133,15 @@ if __name__ == "__main__":
         try:
             print("\nTesting Hugging Face Provider via get_embedding_model...")
             # Ensure we have a key for the test if not in settings
-            if not settings.hf_api_key:
-                import os
+            # if not settings.hf_api_key:
+            #     import os
 
-                os.environ["HF_API_KEY"] = "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"
+            #     os.environ["HF_API_KEY"] =
 
             model = get_embedding_model(provider="huggingface")
-            emb = await model.aget_query_embedding("Institutional reasoning for risk mitigation.")
+            emb = await model.aget_query_embedding(
+                "Institutional reasoning for risk mitigation."
+            )
             print(f"✅ Hugging Face embedding success. Length: {len(emb)}")
             print(f"   Preview (last 3): {emb[-3:]}")
         except Exception as e:
@@ -132,11 +149,15 @@ if __name__ == "__main__":
 
         # 2. Test Hugging Face
         # Use provided sample key if environment is not set up
-        hf_key = "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"
+        # hf_key =
         try:
             print("\nTesting Hugging Face Provider...")
-            model = HuggingFaceInferenceAPIEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", api_key=hf_key)
-            emb = await model.aget_query_embedding("The Air Canada test for hallucination mitigation.")
+            model = HuggingFaceInferenceAPIEmbedding(
+                model_name="sentence-transformers/all-MiniLM-L6-v2", api_key=hf_key
+            )
+            emb = await model.aget_query_embedding(
+                "The Air Canada test for hallucination mitigation."
+            )
             print(f"✅ Hugging Face embedding success. Length: {len(emb)}")
             print(f"   Preview (last 3): {emb[-3:]}")
         except Exception as e:

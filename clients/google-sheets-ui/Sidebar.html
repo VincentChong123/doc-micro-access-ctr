@@ -4,7 +4,7 @@
     <base target="_top">
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-      
+
       body {
         font-family: 'Inter', sans-serif;
         background-color: #0f172a;
@@ -16,7 +16,7 @@
         height: 100vh;
         box-sizing: border-box;
       }
-      
+
       h2 {
         font-size: 1.25rem;
         font-weight: 600;
@@ -27,7 +27,7 @@
         align-items: center;
         gap: 8px;
       }
-      
+
       .chat-container {
         flex-grow: 1;
         overflow-y: auto;
@@ -35,7 +35,7 @@
         flex-direction: column;
         gap: 12px;
       }
-      
+
       .message-card {
         background: rgba(30, 41, 59, 0.7);
         border: 1px solid #334155;
@@ -45,12 +45,12 @@
         animation: slideIn 0.3s ease-out;
         backdrop-filter: blur(8px);
       }
-      
+
       @keyframes slideIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
       }
-      
+
       .status-badge {
         display: inline-block;
         font-size: 0.75rem;
@@ -59,18 +59,18 @@
         border-radius: 999px;
         margin-bottom: 8px;
       }
-      
+
       .badge-intercepted { background: #3b82f6; color: white; }
       .badge-warning { background: #eab308; color: #422006; }
       .badge-approved { background: #22c55e; color: white; }
       .badge-rejected { background: #ef4444; color: white; }
-      
+
       .prompt-text {
         font-size: 0.875rem;
         margin-bottom: 8px;
         color: #cbd5e1;
       }
-      
+
       .prompt-label {
         font-weight: 600;
         color: #94a3b8;
@@ -78,13 +78,13 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
-      
+
       .actions {
         display: flex;
         gap: 8px;
         margin-top: 12px;
       }
-      
+
       button {
         flex: 1;
         border: none;
@@ -95,27 +95,27 @@
         cursor: pointer;
         transition: all 0.2s;
       }
-      
+
       .btn-approve {
         background: #38bdf8;
         color: #0f172a;
       }
-      
+
       .btn-approve:hover {
         background: #0ea5e9;
         transform: translateY(-1px);
       }
-      
+
       .btn-reject {
         background: transparent;
         border: 1px solid #64748b;
         color: #f1f5f9;
       }
-      
+
       .btn-reject:hover {
         background: #334155;
       }
-      
+
       .btn-redact {
         background: #fbbf24;
         color: #78350f;
@@ -123,14 +123,14 @@
       .btn-redact:hover {
         background: #f59e0b;
       }
-      
+
       .empty-state {
         text-align: center;
         color: #64748b;
         margin-top: 40px;
         font-size: 0.875rem;
       }
-      
+
       /* Loader */
       .loader {
         border: 2px solid #334155;
@@ -157,16 +157,16 @@
 
     <script>
       let processedRequests = new Set();
-      
+
       function pollPendingRequests() {
         google.script.run.withSuccessHandler(handleRequests).getPendingRequests();
       }
-      
+
       function detectPII(contextText) {
         // Simple PII detection (NRIC, Email, Phone)
         const nricRegex = /[STFG]\d{7}[A-Z]/ig;
         const hasNric = nricRegex.test(contextText);
-        
+
         if (hasNric) {
           return {
             hasPII: true,
@@ -176,29 +176,29 @@
         }
         return { hasPII: false };
       }
-      
+
       function handleRequests(requests) {
         const container = document.getElementById('chat-container');
         const emptyState = document.getElementById('empty-state');
-        
+
         if (requests.length > 0) {
           emptyState.style.display = 'none';
         }
-        
+
         requests.forEach(req => {
           if (processedRequests.has(req.id)) return;
           processedRequests.add(req.id);
-          
+
           const piiCheck = detectPII(req.context);
-          
+
           const card = document.createElement('div');
           card.className = 'message-card';
           card.id = `card-${req.id}`;
-          
+
           let badgeHtml = `<span class="status-badge badge-intercepted">Intercepted</span>`;
           let piiWarningHtml = '';
           let actionButtonsHtml = '';
-          
+
           if (piiCheck.hasPII) {
             badgeHtml = `<span class="status-badge badge-warning">PII Warning</span>`;
             piiWarningHtml = `
@@ -210,7 +210,7 @@
               <button class="btn-redact" onclick="approveRequest('${req.id}', true)">Redact & Approve</button>
               <button class="btn-reject" onclick="rejectRequest('${req.id}')">Reject</button>
             `;
-            
+
             // Store the redacted version globally for this request
             window[`redacted_${req.id}`] = piiCheck.redacted;
           } else {
@@ -219,7 +219,7 @@
               <button class="btn-reject" onclick="rejectRequest('${req.id}')">Reject</button>
             `;
           }
-          
+
           card.innerHTML = `
             ${badgeHtml}
             <div class="prompt-label">User Prompt</div>
@@ -230,22 +230,22 @@
               ${actionButtonsHtml}
             </div>
           `;
-          
+
           container.prepend(card);
         });
       }
-      
+
       function approveRequest(reqId, useRedacted) {
         document.getElementById(`actions-${reqId}`).innerHTML = '<span class="status-badge badge-approved">Approved</span>';
         const redactedContext = useRedacted ? window[`redacted_${reqId}`] : undefined;
         google.script.run.updateRequestStatus(reqId, "APPROVED", redactedContext);
       }
-      
+
       function rejectRequest(reqId) {
         document.getElementById(`actions-${reqId}`).innerHTML = '<span class="status-badge badge-rejected">Rejected</span>';
         google.script.run.updateRequestStatus(reqId, "REJECTED");
       }
-      
+
       // Poll every 2 seconds
       setInterval(pollPendingRequests, 2000);
     </script>

@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     embedding_model: str = "gemini-embedding-2-preview"
     embedding_dim: int = 384  # Updated for sentence-transformers/all-MiniLM-L6-v2
 
-    hf_api_key: Optional[str] = "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"
+    hf_api_key: Optional[str] = ""
     hf_embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
 
     chunk_size: int = 512
@@ -46,14 +46,16 @@ class Settings(BaseSettings):
     # rag_gemini_model: str = "google-gla:gemini-3-pro-preview"
     # chatbot_gemini_model: str = 'google-gla:gemini-3-pro-preview'
     rag_gemini_model: str = "google-gla:gemini-2.5-flash-lite"
-    chatbot_gemini_model: str = 'google-gla:gemini-2.5-flash-lite'
+    chatbot_gemini_model: str = "google-gla:gemini-2.5-flash-lite"
 
     # Path to the system prompt file
 
     # system_prompt_path: Path = Path(".gemini/system.md")
 
     # Pydantic Settings Configuration
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )
 
     static_dir: str = "src/static"  # The Single Source of Truth
 
