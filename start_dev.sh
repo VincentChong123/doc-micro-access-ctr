@@ -25,11 +25,17 @@ cd /home/vin/01-prj/doc-micro-access-ctr/gateway/api-gateway
 node server.mjs &
 GATEWAY_PID=$!
 
+# 4. Start Ngrok Internet Tunnel
+echo "🌐 Starting Ngrok Tunnel (supply-various-paralyze.ngrok-free.dev) -> Port 3000..."
+# Using --log=stdout and sending to /dev/null suppresses Ngrok's terminal UI
+ngrok http --domain=supply-various-paralyze.ngrok-free.dev 3000 --log=stdout > /dev/null &
+NGROK_PID=$!
+
 # =========================================================
 # THE MAGIC SHUTDOWN TRAP
-# When you press CTRL+C, this automatically kills all 3 servers!
+# When you press CTRL+C, this automatically kills all 4 servers!
 # =========================================================
-trap "echo -e '\n🛑 Shutting down all Ringisho services...'; kill $AI_PID $DOC_PID $GATEWAY_PID; exit" SIGINT SIGTERM
+trap "echo -e '\n🛑 Shutting down all Ringisho services...'; kill $AI_PID $DOC_PID $GATEWAY_PID $NGROK_PID; exit" SIGINT SIGTERM
 
 echo "✅ All services running in the background! Logs will appear below."
 echo "⌨️  Press CTRL+C at any time to stop all servers simultaneously."

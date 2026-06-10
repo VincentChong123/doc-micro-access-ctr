@@ -4,12 +4,12 @@ info:
   version: "1.0.0"
   description: |
     The central routing contract for the Ringisho Platform.
-    
+
     ## ⚠️ Internal Routing Rules (Express Mount Path Stripping)
     This platform uses an API Gateway architecture built on Node.js Express.
-    Frontend clients **must** request the absolute, fully-qualified path. 
+    Frontend clients **must** request the absolute, fully-qualified path.
     However, Express uses `app.use()` which automatically **strips** the mount prefix before forwarding to backend microservices.
-    
+
     Backend developers must design their microservices to listen ONLY for the stripped remainder.
 
     | Microservice       | Frontend URL Path         | Express Mount | Backend Receives Path |

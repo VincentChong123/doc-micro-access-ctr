@@ -17,7 +17,8 @@ console.log = function (...args) {
 // ==============================================================
 // THE DOCUMENT WORKER ENDPOINT
 // ==============================================================
-app.post('/api/workflow/approve', (req, res) => {
+// app.post('/api/workflow/approve', (req, res) => {
+app.post('/approve', (req, res) => {
     const { action, user, data } = req.body;
     console.log(`🔔 Approval request received from Gateway! User: ${user}`);
 

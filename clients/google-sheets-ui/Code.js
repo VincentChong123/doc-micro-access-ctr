@@ -1,33 +1,88 @@
 
+/**
+ * A lightweight, Zero-Trust Masking Engine for Google Apps Script
+ */
+const PrivacyEngine = {
+
+    // 1. Define the sensitive patterns LOB wants to hide
+    rules: {
+    EMAIL: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
+    PHONE: /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/g,
+    ACCOUNT: /\b\d{9,12}\b/g // Assuming corporate accounts are 9-12 digits
+    },
+
+    // 2. The Masking Function (Run BEFORE sending to IT)
+    mask: function(text) {
+    let vault = {}; // This dictionary NEVER leaves Google Sheets
+    let maskedText = text;
+    let counter = 1;
+
+    for (let [type, regex] of Object.entries(this.rules)) {
+        maskedText = maskedText.replace(regex, (match) => {
+        let token = `[${type}_${counter++}]`;
+        vault[token] = match; // Store the real data in the local vault
+        return token;
+        });
+    }
+
+    return { safeText: maskedText, vault: vault };
+    },
+
+    // 3. The Re-hydration Function (Run AFTER receiving from IT)
+    rehydrate: function(safeResponse, vault) {
+    let hydratedText = safeResponse;
+
+    // Swap the tokens back to the real data
+    for (let [token, realData] of Object.entries(vault)) {
+        // Use split/join to replace all occurrences of the token
+        hydratedText = hydratedText.split(token).join(realData);
+    }
+
+    return hydratedText;
+    }
+};
+
   /**
    * Automatically watches for edits. If F1 is checked, it triggers the Approval
 Workflow.
     */
   function onCheckboxClick(e) {
     // If the edit wasn't on a cell (e.g., formatting), ignore it
-    if (!e || !e.range)
-    {
-      // 2. Alert the user that the process has started
-        SpreadsheetApp.getActiveSpreadsheet().toast("edit wasn't on a cell", "Ringisho Workflow", 3);
-        console.log("Edit event ignored: Not a cell edit.");
-      return;
-    }
+    if (!e || !e.range) return;
 
     const sheet = e.range.getSheet();
     const cell = e.range.getA1Notation();
     const value = e.value;
 
-    // 1. Check if the exact edit happened on the Ringisho sheet, at cell F1, and was checked (TRUE)
+    // ====================================================================
+    // 1. AUTHENTICATION WORKFLOW: Capture Email via Checkbox Click
+    // ====================================================================
+    if (sheet.getName() === "get_user_email_address" && cell === "B1" && value === "TRUE") {
+      // Because this is triggered by a physical human click, it has permission to read identity!
+      const userEmail = e.user ? e.user.getEmail() : Session.getActiveUser().getEmail();
+
+      if (userEmail) {
+        // Save the email securely to the User's private Google Account memory
+        PropertiesService.getUserProperties().setProperty("AI_BILLING_EMAIL", userEmail);
+
+        // Give them a success message and uncheck the box for the next person
+        sheet.getRange("C1").setValue(`✅ Authenticated as: ${userEmail}`);
+        e.range.uncheck();
+        SpreadsheetApp.getActiveSpreadsheet().toast(`Identity secured: ${userEmail}`, "Authentication Success");
+      } else {
+        SpreadsheetApp.getActiveSpreadsheet().toast("Failed to get email. Corporate Workspace required.", "Error");
+        e.range.uncheck();
+      }
+      return; // Stop execution here
+    }
+
+    // ====================================================================
+    // 2. RINGISHO WORKFLOW: Trigger Node.js Backend
+    // ====================================================================
     if (sheet.getName() === "Ringisho" && cell === "F1" && value === "TRUE") {
-
-      // 2. Alert the user that the process has started
-        SpreadsheetApp.getActiveSpreadsheet().toast("Submitting to Node.js backend...", "Ringisho Workflow", 3);
-         console.log("Triggering workflow: F1 checked. Starting submission to Node.js backend.");
-
-      // 3. Call your Node.js Backend to generate the PDF and upload to MinIO!
+      SpreadsheetApp.getActiveSpreadsheet().toast("Submitting to Node.js backend...", "Ringisho Workflow", 3);
+      console.log("Triggering workflow: F1 checked. Starting submission to Node.js backend.");
       submitToNodeBackend(sheet);
-
-      // 4. (Optional) Uncheck the box automatically so it resets for next time
       sheet.getRange("F1").uncheck();
     }
   }
@@ -69,52 +124,81 @@ Workflow.
 
 /*
  * ************ */
-    /**
-     * Corporate AI Proxy for Google Sheets.
-     * Sends the prompt to the internal company Node.js server.
-     *
-     * @param {string} prompt The instruction for the AI.
-     * @param {string} context (Optional) A cell or range to use as context.
-     * @return The AI-generated response.
-     * @customfunction
-     */
-    function COMPANY_AI(prompt, context) {
-      // 1. Point strictly to the Ringisho API Gateway
-      const proxyUrl = 'https://supply-various-paralyze.ngrok-free.dev/api/ai/v1/sheet-chat';
 
-      // 2. Build the payload matching the Pydantic `SheetPromptRequest` schema
-      const payload = {
-        prompt: prompt,
-        context: context ? JSON.stringify(context) : ""
-      };
+/**
+ * Corporate AI Proxy for Google Sheets.
+ * Uses Zero-Trust Masking to scrub PII locally before sending to IT.
+ *
+ * @param {string} prompt The instruction for the AI.
+ * @param {string} context (Optional) A cell or range to use as context.
+ * @return The AI-generated response.
+ * @customfunction
+ */
+function COMPANY_AI(prompt, context) {
+  // ========================================================
+  // 1. USER IDENTITY (From Secure Storage)
+  // ========================================================
+  // Because formulas are blocked from reading identity, we read the memory
+  // saved by the Checkbox click!
+  const userEmail = PropertiesService.getUserProperties().getProperty("AI_BILLING_EMAIL");
 
-      const options = {
-        method: 'post',
-        contentType: 'application/json',
-        payload: JSON.stringify(payload),
-        muteHttpExceptions: true
-      };
+  if (!userEmail) {
+    // Gracefully fail and instruct the user on exactly how to authenticate
+    return `❌ Auth Required: Please tick the checkbox at 'get_user_email_address!B1' to authenticate.`;
+  }
 
-      try {
-        // 3. The request hits Gateway -> Python -> Groq LLM
-        const response = UrlFetchApp.fetch(proxyUrl, options);
+  // ========================================================
+  // 2. CLIENT-SIDE PII MASKING (ZERO TRUST)
+  // ========================================================
+  const contextString = context ? JSON.stringify(context) : "";
 
-        if (response.getResponseCode() === 200) {
-          const json = JSON.parse(response.getContentText());
+  // Mask the prompt and context locally
+  const maskedPrompt = PrivacyEngine.mask(prompt);
+  const maskedContext = PrivacyEngine.mask(contextString);
 
-          // LLMOps Traceability (You can view this in Apps Script Execution Logs)
-          console.log(`[LLMOps Trace] Run ID: ${json.meta.run_id}`);
-          console.log(`[LLMOps Trace] Latency: ${json.meta.latency_ms}ms | Model: ${json.meta.model_invoked}`);
+  // Merge the vaults so we can rehydrate everything later
+  const mergedVault = { ...maskedPrompt.vault, ...maskedContext.vault };
 
-          // 4. Return just the text string to populate the spreadsheet cell
-          return json.result;
-        } else {
-          return "❌ Proxy Error: " + response.getContentText();
-        }
-      } catch (e) {
-        return "❌ Connection Failed: Could not reach internal proxy.";
-      }
+  // ========================================================
+  // 3. SECURE API CALL TO PYTHON BACKEND
+  // ========================================================
+  const proxyUrl = 'https://supply-various-paralyze.ngrok-free.dev/api/ai/v1/sheet-chat';
+
+  const payload = {
+    prompt: maskedPrompt.safeText,
+    context: maskedContext.safeText,
+    user: userEmail
+  };
+
+  const options = {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  };
+
+  try {
+    const response = UrlFetchApp.fetch(proxyUrl, options);
+    if (response.getResponseCode() === 200) {
+      const json = JSON.parse(response.getContentText());
+
+      // LLMOps Trace
+      console.log(`[LLMOps Trace] Run ID: ${json.meta.run_id}`);
+      console.log(`[LLMOps Trace] Latency: ${json.meta.latency_ms}ms | Model: ${json.meta.model_invoked}`);
+
+      // ========================================================
+      // 4. CLIENT-SIDE PII RE-HYDRATION
+      // ========================================================
+      const finalSafeAnswer = PrivacyEngine.rehydrate(json.result, mergedVault);
+      return finalSafeAnswer;
+
+    } else {
+      return "❌ Proxy Error: " + response.getContentText();
     }
+  } catch (e) {
+    return "❌ Connection Failed: Could not reach internal proxy.";
+  }
+}
 
 function forceAuth() {
   UrlFetchApp.fetch("https://www.google.com");
