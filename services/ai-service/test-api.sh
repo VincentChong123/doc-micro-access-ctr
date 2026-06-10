@@ -1,0 +1,1 @@
+curl -X POST "http://localhost:8000/api/v1/sheet-chat" -H "Content-Type: application/json" -d '{ "prompt": "What are the three most important metrics in Corporate Banking?","context": "The user is a Relationship Manager looking for a very brief, one-sentence summary."}'    

@@ -23,7 +23,7 @@ repos:
       - id: trufflehog
         name: TruffleHog (System)
         # Use the absolute path to your home directory binary
-        entry: trufflehog git file://. --since-commit HEAD --only-verified --fail
+        entry: /home/vin/.local/bin/trufflehog git file://. --since-commit HEAD --only-verified --fail
         language: system
         pass_filenames: false
   - repo: https://github.com/PyCQA/bandit
