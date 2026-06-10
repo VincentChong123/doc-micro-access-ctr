@@ -7,6 +7,7 @@ from app.agents.simple_agent import generate_summary
 
 router = APIRouter()
 
+
 @router.post("/sheet-chat")
 async def post_sheet_chat(request: SheetPromptRequest):
     """The synchronous endpoint called by Google Sheets"""
@@ -19,13 +20,15 @@ async def post_sheet_chat(request: SheetPromptRequest):
     latency_ms = int((time.time() - start_time) * 1000)
 
     # Return standard JSON back to Apps Script with LLMOps Traceability
-    return JSONResponse(content={
-        "result": final_text,
-        "meta": {
-            "run_id": run_id,
-            "latency_ms": latency_ms,
-            "model_invoked": "groq:llama3-70b-8192",
-            "agent_name": "summary_agent",
-            "timestamp": time.time()
+    return JSONResponse(
+        content={
+            "result": final_text,
+            "meta": {
+                "run_id": run_id,
+                "latency_ms": latency_ms,
+                "model_invoked": "groq:llama3-70b-8192",
+                "agent_name": "summary_agent",
+                "timestamp": time.time(),
+            },
         }
-    })
+    )

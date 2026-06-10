@@ -9,12 +9,14 @@ const app = express();
 // ==============================================================
 // 1. CONTRACT-FIRST SWAGGER UI
 // ==============================================================
-const CONTRACT_PATH = '/home/vin/01-prj/doc-micro-access-ctr/docs/schema_contract/schema_version=2026-06-06/openapi3-ringisho-spec.json';
-if (fs.existsSync(CONTRACT_PATH)) {
-    const openapiContract = JSON.parse(fs.readFileSync(CONTRACT_PATH, 'utf-8'));
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiContract));
-} else {
-    console.warn("⚠️ Swagger Contract JSON not found at path.");
+if (0) {
+    const CONTRACT_PATH = '/home/vin/01-prj/doc-micro-access-ctr/docs/schema_contract/schema_version=2026-06-06/openapi3-ringisho-spec.json';
+    if (fs.existsSync(CONTRACT_PATH)) {
+        const openapiContract = JSON.parse(fs.readFileSync(CONTRACT_PATH, 'utf-8'));
+        app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiContract));
+    } else {
+        console.warn("⚠️ Swagger Contract JSON not found at path.");
+    }
 }
 
 // ==============================================================

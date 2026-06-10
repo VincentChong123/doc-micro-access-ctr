@@ -28,7 +28,7 @@ app.post('/approve', (req, res) => {
     // Kick off the PDF generation script
     console.log(`📄 Kicking off generate_approval_pdf.mjs...`);
     const scriptPath = path.join(__dirname, 'scripts', 'generate_approval_pdf.mjs');
-    exec(`node ${scriptPath}`, { cwd: '/home/vin/01-prj/doc-micro-access-ctr' }, (error, stdout, stderr) => {
+    exec(`node ${scriptPath}`, { cwd: path.resolve(__dirname, '../../') }, (error, stdout, stderr) => {
         if (error) {
             console.error(`❌ PDF Generation Failed: ${error.message}`);
             return;

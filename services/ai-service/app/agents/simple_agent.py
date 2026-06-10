@@ -1,10 +1,5 @@
 from pydantic_ai import Agent
 from app.config import settings
-from dotenv import load_dotenv
-
-load_dotenv(
-    dotenv_path="/home/vin/01-prj/doc-micro-access-ctr/services/ai-service/.env"
-)
 # Define your Agent
 agent = Agent(
     model=settings.groq_model,

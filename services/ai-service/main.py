@@ -1,7 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=".env")
+
 from app.api.routes import router
-import os
 
 app = FastAPI(title="Ringisho AI Service")
 
