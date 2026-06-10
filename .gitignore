@@ -1,6 +1,7 @@
 yminnn2-agy-prj-01-49a23513031f.json
 credentials.json
 .env
+**/__tmp__
 **/.venv
 /.tmp_venv
 **/node_modules

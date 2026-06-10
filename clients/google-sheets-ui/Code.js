@@ -79,15 +79,13 @@ Workflow.
      * @customfunction
      */
     function COMPANY_AI(prompt, context) {
-      // 1. Combine the prompt and the context (if the user highlighted other cells)
-      const fullPrompt = context ? `${prompt}\nContext: ${JSON.stringify(context)}` : prompt;
+      // 1. Point strictly to the Ringisho API Gateway
+      const proxyUrl = 'https://supply-various-paralyze.ngrok-free.dev/api/ai/v1/sheet-chat';
 
-      // 2. Point this strictly to your internal company Node.js Proxy/Firewall
-      const proxyUrl = 'https://supply-various-paralyze.ngrok-free.dev/api/llm/generate';
-
+      // 2. Build the payload matching the Pydantic `SheetPromptRequest` schema
       const payload = {
-        user: "dummy_formula_user",
-        query: fullPrompt
+        prompt: prompt,
+        context: context ? JSON.stringify(context) : ""
       };
 
       const options = {
@@ -98,11 +96,18 @@ Workflow.
       };
 
       try {
-        // 3. The request hits your Node.js server, NOT Google's public Gemini!
+        // 3. The request hits Gateway -> Python -> Groq LLM
         const response = UrlFetchApp.fetch(proxyUrl, options);
 
         if (response.getResponseCode() === 200) {
-          return JSON.parse(response.getContentText()).text;
+          const json = JSON.parse(response.getContentText());
+
+          // LLMOps Traceability (You can view this in Apps Script Execution Logs)
+          console.log(`[LLMOps Trace] Run ID: ${json.meta.run_id}`);
+          console.log(`[LLMOps Trace] Latency: ${json.meta.latency_ms}ms | Model: ${json.meta.model_invoked}`);
+
+          // 4. Return just the text string to populate the spreadsheet cell
+          return json.result;
         } else {
           return "❌ Proxy Error: " + response.getContentText();
         }

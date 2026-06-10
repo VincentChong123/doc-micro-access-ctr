@@ -65,7 +65,7 @@ async def post_sheet_chat(request: SheetPromptRequest, chat_service: Annotated[C
         if chunk_str:
             try:
                 data = json.loads(chunk_str)
-                # Because the stream yields cumulative text, the last chunk 
+                # Because the stream yields cumulative text, the last chunk
                 # will contain the complete, final AI response!
                 if data.get("role") == "assistant":
                     final_text = data.get("content", "")

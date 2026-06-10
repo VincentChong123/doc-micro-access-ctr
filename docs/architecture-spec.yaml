@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Ringisho Enterprise Platform API
+  version: "1.0.0"
+  description: |
+    The central routing contract for the Ringisho Platform.
+    
+    ## ⚠️ Internal Routing Rules (Express Mount Path Stripping)
+    This platform uses an API Gateway architecture built on Node.js Express.
+    Frontend clients **must** request the absolute, fully-qualified path. 
+    However, Express uses `app.use()` which automatically **strips** the mount prefix before forwarding to backend microservices.
+    
+    Backend developers must design their microservices to listen ONLY for the stripped remainder.
+
+    | Microservice       | Frontend URL Path         | Express Mount | Backend Receives Path |
+    |--------------------|---------------------------|---------------|-----------------------|
+    | Python AI Service  | `/api/ai/v1/sheet-chat`   | `/api/ai`     | `/v1/sheet-chat`      |
+    | Node Document Svc  | `/api/workflow/approve`   | `/api/workflow`| `/approve`            |
+
+servers:
+  - url: https://{ngrok_id}.ngrok-free.dev
+    description: Public Egress Tunnel (Google Sheets Frontend)
+    variables:
+      ngrok_id:
+        default: supply-various-paralyze
+
+  - url: http://localhost:3000
+    description: 🚦 Node.js API Gateway (The Core Router)
+
+paths:
+  /api/ai/v1/sheet-chat:
+    post:
+      summary: Synchronous LLM Generation
+      description: |
+        **Frontend:** Call `POST /api/ai/v1/sheet-chat`
+        **Python Backend:** Listen on `POST /v1/sheet-chat` (Port 8000)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                context:
+                  type: string
+      responses:
+        '200':
+          description: Successful AI Generation with Traceability
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  meta:
+                    type: object
+                    properties:
+                      run_id:
+                        type: string
+                      latency_ms:
+                        type: integer
+                      model_invoked:
+                        type: string
+
+  /api/workflow/approve:
+    post:
+      summary: Asynchronous PDF Generation
+      description: |
+        **Frontend:** Call `POST /api/workflow/approve`
+        **Node Backend:** Listen on `POST /approve` (Port 4000)
+      responses:
+        '200':
+          description: PDF generation started

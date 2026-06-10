@@ -28,7 +28,7 @@ export async function js_function_update_cell(sheetName, cellId, cellValue) {
             scopes: ['https://www.googleapis.com/auth/spreadsheets']
         });
         const authClient = await auth.getClient();
-        
+
         // 2. Initialize the Sheets API
         const sheets = google.sheets({ version: 'v4', auth: authClient });
 
