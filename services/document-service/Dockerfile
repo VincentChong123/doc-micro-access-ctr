@@ -4,7 +4,7 @@ FROM node:20-alpine
 WORKDIR /usr/src/app
 
 # Install system dependencies required for PDF generation or similar tasks (if needed)
-# RUN apk add --no-cache chromium 
+# RUN apk add --no-cache chromium
 
 COPY package*.json ./
 
