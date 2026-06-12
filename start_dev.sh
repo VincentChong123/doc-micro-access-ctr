@@ -4,7 +4,7 @@ echo "🚀 Booting up the Ringisho Monorepo..."
 
 # 1. Start Python AI Service (Port 8000)
 echo "🧠 Starting Python AI Service on Port 8000..."
-cd /home/vin/01-prj/doc-micro-access-ctr/services/ai-service
+cd services/ai_service
 # Attempt to activate virtual environment if it exists
 source .venv/bin/activate 2>/dev/null || true
 python main.py &
@@ -12,7 +12,7 @@ AI_PID=$!
 
 # 2. Start Node Document Service (Port 4000)
 echo "📄 Starting Node Document Service on Port 4000..."
-cd /home/vin/01-prj/doc-micro-access-ctr/services/document-service
+cd /home/vin/01-prj/doc-micro-access-ctr/services/document_service
 node server.mjs &
 DOC_PID=$!
 

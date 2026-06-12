@@ -31,13 +31,15 @@ if (0) {
 // AI Service -> Forwards to Python
 app.use('/api/ai', createProxyMiddleware({
     target: process.env.AI_SERVICE_URL || 'http://localhost:8000',
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: { '^/api/ai': '' } // Required to strip the prefix!
 }));
 
 // Document Service -> Forwards to Node.js
 app.use('/api/workflow', createProxyMiddleware({
     target: process.env.DOC_SERVICE_URL || 'http://localhost:4000',
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: { '^/api/workflow': '' } // Required to strip the prefix!
 }));
 
 app.use(express.json());

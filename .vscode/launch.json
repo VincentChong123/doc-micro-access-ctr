@@ -5,10 +5,21 @@
             "name": "1-Python: Debug AI Service (Uvicorn)",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/services/ai-service/main.py",
+            "program": "${workspaceFolder}/services/ai_service/main.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/services/ai-service",
+            "cwd": "${workspaceFolder}/services/ai_service",
             "justMyCode": false
+        },
+        {
+            "name": "2-Python: Debug Current File as Module",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/.vscode/run_as_module.py",
+            "args": [
+                "${file}"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
         },
         {
             "type": "node",
