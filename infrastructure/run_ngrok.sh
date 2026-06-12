@@ -1,0 +1,1 @@
+ngrok http --domain=supply-various-paralyze.ngrok-free.dev 3000

@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "GCP: Login to Application Default Credentials",
+            "type": "shell",
+            "command": "gcloud auth application-default login",
+            "problemMatcher": []
+        },
+        {
+            "label": "GCP: Fetch GROQ_API_KEY and save to .env",
+            "type": "shell",
+            "command": "export SECRET_KEY=$(curl -s -H \"Authorization: Bearer $(gcloud auth print-access-token)\" \"https://secretmanager.googleapis.com/v1/projects/543095975317/secrets/GROQ_API_KEY/versions/1:access\" | jq -r .payload.data | base64 --decode) && echo \"GROQ_API_KEY=$SECRET_KEY\" > services/ai-service/.env && echo \"✅ Secret successfully saved to services/ai-service/.env\"",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}
