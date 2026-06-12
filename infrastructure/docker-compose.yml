@@ -1,39 +1,39 @@
 version: '3.8'
 
 services:
-  api-gateway:
+  api_gateway:
     build:
-      context: ../gateway/api-gateway
-    container_name: api-gateway
+      context: ../gateway/api_gateway
+    container_name: api_gateway
     ports:
       - "3000:3000"
     environment:
-      - AI_SERVICE_URL=http://ai-service:8000
-      - DOC_SERVICE_URL=http://document-service:4000
+      - AI_SERVICE_URL=http://ai_service:8000
+      - DOC_SERVICE_URL=http://document_service:4000
     depends_on:
-      - ai-service
-      - document-service
+      - ai_service
+      - document_service
     volumes:
       # Mount the docs folder so the Swagger UI can find the contract JSON
       - ../docs:/usr/src/app/docs
     networks:
       - ringisho-net
 
-  ai-service:
+  ai_service:
     build:
-      context: ../services/ai-service
-    container_name: ai-service
+      context: ../services/ai_service
+    container_name: ai_service
     ports:
       - "8000:8000"
     env_file:
-      - ../services/ai-service/.env
+      - ../services/ai_service/.env
     networks:
       - ringisho-net
 
-  document-service:
+  document_service:
     build:
-      context: ../services/document-service
-    container_name: document-service
+      context: ../services/document_service
+    container_name: document_service
     ports:
       - "4000:4000"
     environment:

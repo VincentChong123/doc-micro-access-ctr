@@ -32,7 +32,12 @@ if (0) {
 app.use('/api/ai', createProxyMiddleware({
     target: process.env.AI_SERVICE_URL || 'http://localhost:8000',
     changeOrigin: true,
-    pathRewrite: { '^/api/ai': '' } // Required to strip the prefix!
+    pathRewrite: { '^/api/ai': '' }, // Required to strip the prefix!
+    logLevel: 'debug',
+    onError: (err, req, res) => {
+        console.error(`[API Gateway] Proxy Error for /api/ai:`, err);
+        res.status(502).send(`Gateway Error: Unable to reach AI Service. Details: ${err.message}`);
+    }
 }));
 
 // Document Service -> Forwards to Node.js

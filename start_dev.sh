@@ -21,7 +21,7 @@ sleep 2
 
 # 3. Start Node API Gateway (Port 3000)
 echo "🚦 Starting API Gateway on Port 3000..."
-cd /home/vin/01-prj/doc-micro-access-ctr/gateway/api-gateway
+cd /home/vin/01-prj/doc-micro-access-ctr/gateway/api_gateway
 node server.mjs &
 GATEWAY_PID=$!
 

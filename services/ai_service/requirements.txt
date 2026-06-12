@@ -6,3 +6,4 @@ python-dotenv==1.2.2
 uvicorn==0.49.0
 # logfire
 logfire[fastapi]
+google-cloud-secret-manager

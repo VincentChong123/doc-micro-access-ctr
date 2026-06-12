@@ -1,1 +1,1 @@
-ngrok http --domain=supply-various-paralyze.ngrok-free.dev 3000
+ngrok http --url=supply-various-paralyze.ngrok-free.dev 3000

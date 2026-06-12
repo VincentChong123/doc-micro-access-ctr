@@ -29,8 +29,8 @@ if root_dir == workspace_dir and 'app' in file_path.parts:
     app_index = file_path.parts.index('app')
     root_dir = Path(*file_path.parts[:app_index])
 
-# FIX: If GOOGLE_APPLICATION_CREDENTIALS is a relative path (e.g. "./keys/..."), 
-# resolve it relative to the workspace root (where .vscode is located), 
+# FIX: If GOOGLE_APPLICATION_CREDENTIALS is a relative path (e.g. "./keys/..."),
+# resolve it relative to the workspace root (where .vscode is located),
 # NOT the current working directory, which might already be inside services/ai-service.
 workspace_root = Path(__file__).parent.parent.resolve()
 if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
