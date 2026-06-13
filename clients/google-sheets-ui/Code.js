@@ -1,4 +1,3 @@
-
 /**
  * A lightweight, Zero-Trust Masking Engine for Google Apps Script
  */
@@ -42,10 +41,25 @@ const PrivacyEngine = {
     }
 };
 
+    // Code.js
+    function getBaseUrl() {
+        const currentSheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+
+        if (currentSheetId === CONFIG.DEV_SHEET_ID) {
+        return CONFIG.DEV_URL;
+        } else {
+        return CONFIG.PROD_URL;
+        }
+    }
+
+
   /**
    * Automatically watches for edits. If F1 is checked, it triggers the Approval
 Workflow.
     */
+
+
+
   function onCheckboxClick(e) {
     // If the edit wasn't on a cell (e.g., formatting), ignore it
     if (!e || !e.range) return;
@@ -104,16 +118,23 @@ Workflow.
       payload: JSON.stringify(payload)
     };
 
-      SpreadsheetApp.getActiveSpreadsheet().toast("completed playload");
+    const approve_api_url_endpoint = `${getBaseUrl()}${CONFIG.WORKFLOW_ENDPOINT}`;
+
+    console.log("approve_api_url_endpoint: " + approve_api_url_endpoint);
+
+    SpreadsheetApp.getActiveSpreadsheet().toast("completed playload");
     console.log("Payload prepared, attempting to submit to Node.js backend...");
 
     try {
         SpreadsheetApp.getActiveSpreadsheet().toast("try fetching");
-      console.log("Attempting to reach Node.js backend at https://supply-various-paralyze.ngrok-free.dev/api/workflow/approve");
-      // Replace with your Node.js Ngrok URL!
-      UrlFetchApp.fetch("https://supply-various-paralyze.ngrok-free.dev/api/workflow/approve", options);
-    SpreadsheetApp.getActiveSpreadsheet().toast("✅ Successfully submitted to Kacho!", "Success");
-      console.log("✅ Successfully submitted workflow to Node.js backend!");
+        console.log("Attempting to reach Node.js backend at endpoint: " + approve_api_url_endpoint);
+        // Replace with your Node.js Ngrok URL!
+        // UrlFetchApp.fetch("https://supply-various-paralyze.ngrok-free.dev/api/workflow/approve", options);
+        // Make the parameterized fetch call
+        UrlFetchApp.fetch(approve_api_url_endpoint, options);
+
+        SpreadsheetApp.getActiveSpreadsheet().toast("✅ Successfully submitted to Kacho!", "Success");
+        console.log("✅ Successfully submitted workflow to Node.js backend!");
     } catch (error) {
       console.log("❌ CRITICAL ERROR: " + error.message);
       SpreadsheetApp.getActiveSpreadsheet().toast("❌ Failed to reach backend.",
@@ -162,7 +183,7 @@ function COMPANY_AI(prompt, context) {
   // ========================================================
   // 3. SECURE API CALL TO PYTHON BACKEND
   // ========================================================
-  const proxyUrl = 'https://supply-various-paralyze.ngrok-free.dev/api/ai/v1/sheet-chat';
+  const proxyUrl = `${getBaseUrl()}${CONFIG.AI_ENDPOINT}`;
 
   const payload = {
     prompt: maskedPrompt.safeText,

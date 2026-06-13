@@ -1,15 +1,21 @@
 import uuid
 import time
 import logfire
+import logging
+
+logger = logging.getLogger(__name__)
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from app.models.schemas import SheetPromptRequest
 from app.agents.simple_agent import generate_summary
+from utils.route_loader import get_ai_service_route
+
+PREFIX, ENDPOINT = get_ai_service_route()
 
 router = APIRouter()
 
 
-@router.post("/sheet-chat")
+@router.post(ENDPOINT)
 async def post_sheet_chat(request: SheetPromptRequest):
     """The synchronous endpoint called by Google Sheets"""
     start_time = time.time()
@@ -18,7 +24,7 @@ async def post_sheet_chat(request: SheetPromptRequest):
 
     # Add a Logfire Span to capture all requested variables
     with logfire.span("AI_Generation_Run", session_id=request.user, run_id=run_id, prompt_id=prompt_id, timestamp=start_time):
-        logfire.info(f"User {request.user} requested AI generation.")
+        logger.info(f"User {request.user} requested AI generation.")
         # Call your Pydantic-AI Agent
         final_text = await generate_summary(request.prompt, request.context)
 

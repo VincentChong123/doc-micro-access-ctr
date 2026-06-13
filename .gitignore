@@ -2,6 +2,8 @@ yminnn2-agy-prj-01-49a23513031f.json
 credentials.json
 **/.env
 .del-env
+.env.test
+/keys
 **/__tmp__
 **/.venv
 /.tmp_venv
@@ -12,3 +14,4 @@ credentials.json
 *.pdf
 .antigravitycli/0c98b3b9-3877-457f-bb83-35eecb04f686.json
 /minio-data
+/infrastructure/minio

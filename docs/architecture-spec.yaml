@@ -46,7 +46,7 @@ paths:
                 context:
                   type: string
       responses:
-        '200':
+        "200":
           description: Successful AI Generation with Traceability
           content:
             application/json:
@@ -72,5 +72,5 @@ paths:
         **Frontend:** Call `POST /api/workflow/approve`
         **Node Backend:** Listen on `POST /approve` (Port 4000)
       responses:
-        '200':
+        "200":
           description: PDF generation started

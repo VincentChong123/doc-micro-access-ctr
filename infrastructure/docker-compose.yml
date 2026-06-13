@@ -12,7 +12,7 @@ services:
       - DOC_SERVICE_URL=http://document_service:4000
     depends_on:
       - ai_service
-      - document_service
+      # - document_service
     volumes:
       # Mount the docs folder so the Swagger UI can find the contract JSON
       - ../docs:/usr/src/app/docs
@@ -30,42 +30,57 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/application_default_credentials.json
     volumes:
       # Mount your local gcloud ADC file into the container
-      - ~/.config/gcloud/application_default_credentials.json:/tmp/keys/application_default_credentials.json:ro
+      - ./keys/application_default_credentials.json:/app/keys/application_default_credentials.json:ro
     networks:
       - ringisho-net
 
-  document_service:
-    build:
-      context: ../services/document_service
-    container_name: document_service
-    ports:
-      - "4000:4000"
-    environment:
-      - MINIO_ENDPOINT=minio
-      - MINIO_PORT=9000
-      - MINIO_ACCESS_KEY=admin
-      - MINIO_SECRET_KEY=password
-    depends_on:
-      - minio
-    networks:
-      - ringisho-net
+  # document_service:
+  #   build:
+  #     context: ../services/document_service
+  #   container_name: document_service
+  #   ports:
+  #     - "4000:4000"
+  #   environment:
+  #     - MINIO_ENDPOINT=minio
+  #     - MINIO_PORT=9000
+  #     - MINIO_ACCESS_KEY=admin
+  #     - MINIO_SECRET_KEY=password
+  #   depends_on:
+  #     - minio
+  #   networks:
+  #     - ringisho-net
 
-  minio:
-    image: minio/minio
-    container_name: minio
-    ports:
-      - "9000:9000" # S3 API endpoint
-      - "9001:9001" # MinIO Console Browser UI
-    environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=password
-    volumes:
-      - ../minio-data:/data
-    command: server /data --console-address ":9001"
+  # # minio:
+  # #   image: minio/minio
+  # #   container_name: minio
+  # #   ports:
+  # #     - "9000:9000" # S3 API endpoint
+  # #     - "9001:9001" # MinIO Console Browser UI
+  # #   environment:
+  # #     - MINIO_ROOT_USER=admin
+  # #     - MINIO_ROOT_PASSWORD=password
+  # #   volumes:
+  # #     - ../minio-data:/data
+  # #   command: server /data --console-address ":9001"
+  # #   restart: unless-stopped
+  # #   networks:
+  # #     - ringisho-net
+
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
     restart: unless-stopped
-    networks:
-      - ringisho-net
-
+    ports:
+      - "4040:4040" # Ngrok dashboard
+    environment:
+      # Docker Compose automatically pulls this from your .env file!
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command:
+      - "http"
+      - "api_gateway:3000" # Point ngrok to your dockerized gateway
+    depends_on:
+      - api_gateway
 networks:
   ringisho-net:
     driver: bridge

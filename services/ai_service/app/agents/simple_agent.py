@@ -1,4 +1,6 @@
 import asyncio
+import logging
+logger = logging.getLogger(__name__)
 from pydantic_ai import Agent
 from pydantic_ai.models.groq import GroqModel
 from pydantic_ai.providers.groq import GroqProvider
@@ -40,9 +42,9 @@ async def generate_summary(prompt: str, context: str) -> str:
 async def test_generate_summary():
     prompt = "Summarize the key points of the meeting."
     context = "The meeting discussed Q3 earnings, the new marketing strategy for Q4, and the upcoming product launch. Revenue was up 15%."
-    print("Running generate_summary test...")
+    logger.info("Running generate_summary test...")
     summary = await generate_summary(prompt, context)
-    print("Summary result:", summary)
+    logger.info(f"Summary result: {summary}")
 
 
 if __name__ == "__main__":

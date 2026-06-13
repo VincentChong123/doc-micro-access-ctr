@@ -1,4 +1,5 @@
 ps aux | grep ngrok
+#sudo kill -9 $(pgrep ngrok)
 echo
 echo
 echo
