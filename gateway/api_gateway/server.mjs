@@ -59,20 +59,27 @@ app.listen(PORT, () => {
     // ==============================================================
     // HEALTH CHECKS
     // ==============================================================
-    const checkServiceHealth = (port, serviceName) => {
-        const socket = new net.Socket();
-        socket.setTimeout(2000);
-        socket.on('connect', () => {
-            console.log(`✅ Port ${port} ready for ${serviceName}`);
-            socket.destroy();
-        }).on('error', () => {
-            console.log(`❌ Port ${port} NOT ready for ${serviceName} (Start the server!)`);
-        }).on('timeout', () => {
-            console.log(`❌ Port ${port} TIMEOUT for ${serviceName}`);
-            socket.destroy();
-        }).connect(port, '127.0.0.1');
+    const checkServiceHealth = (urlStr, serviceName) => {
+        try {
+            const url = new URL(urlStr);
+            const port = url.port || (url.protocol === 'https:' ? 443 : 80);
+            const host = url.hostname;
+            const socket = new net.Socket();
+            socket.setTimeout(2000);
+            socket.on('connect', () => {
+                console.log(`✅ ${serviceName} ready at ${host}:${port}`);
+                socket.destroy();
+            }).on('error', () => {
+                console.log(`❌ ${serviceName} NOT ready at ${host}:${port}`);
+            }).on('timeout', () => {
+                console.log(`❌ ${serviceName} TIMEOUT at ${host}:${port}`);
+                socket.destroy();
+            }).connect(port, host);
+        } catch (e) {
+            console.log(`❌ Invalid URL for ${serviceName}: ${urlStr}`);
+        }
     };
 
-    checkServiceHealth(4000, 'Document Service');
-    checkServiceHealth(8000, 'AI Service');
+    checkServiceHealth(process.env.DOC_SERVICE_URL || 'http://localhost:4000', 'Document Service');
+    checkServiceHealth(process.env.AI_SERVICE_URL || 'http://localhost:8000', 'AI Service');
 });

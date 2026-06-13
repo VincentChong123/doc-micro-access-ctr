@@ -17,8 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Expose the FastAPI port
-EXPOSE 8000
+# Default port, overridden by $PORT env var (like in GCP Cloud Run)
+ENV PORT=8080
+EXPOSE $PORT
 
 # Run Uvicorn pointing to main.py
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT}"]

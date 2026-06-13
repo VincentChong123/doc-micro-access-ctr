@@ -4,8 +4,8 @@ from pathlib import Path
 
 # Setup paths relative to this script
 BASE_DIR = Path(__file__).resolve().parent.parent
-SPEC_PATH = BASE_DIR / "docs" / "architecture-spec.yaml"
-CONFIG_PATH = Path(__file__).resolve().parent / "google-sheets-ui/Config.js"
+SPEC_PATH = BASE_DIR / "specs" / "architecture-spec.yaml"
+CONFIG_PATH = BASE_DIR / "clients" / "google-sheets-ui" / "Config.js"
 
 
 def sync_endpoints():

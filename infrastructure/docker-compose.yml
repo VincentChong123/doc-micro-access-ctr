@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - AI_SERVICE_URL=http://ai_service:8000
+      - AI_SERVICE_URL=http://ai_service:8080
       - DOC_SERVICE_URL=http://document_service:4000
     depends_on:
       - ai_service
@@ -20,6 +20,7 @@ services:
       - ringisho-net
 
   ai_service:
+    image: gcp-ai-service:latest
     build:
       context: ../services/ai_service
     container_name: ai_service
@@ -67,20 +68,20 @@ services:
       - ringisho-net
 
 
-  ngrok:
-    image: ngrok/ngrok:latest
-    container_name: ngrok
-    restart: unless-stopped
-    ports:
-      - "4040:4040" # Ngrok dashboard
-    environment:
-      # Docker Compose automatically pulls this from your .env file!
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-    command:
-      - "http"
-      - "api_gateway:3000" # Point ngrok to your dockerized gateway
-    depends_on:
-      - api_gateway
+  # ngrok:
+  #   image: ngrok/ngrok:latest
+  #   container_name: ngrok
+  #   restart: unless-stopped
+  #   ports:
+  #     - "4040:4040" # Ngrok dashboard
+  #   environment:
+  #     # Docker Compose automatically pulls this from your .env file!
+  #     - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+  #   command:
+  #     - "http"
+  #     - "api_gateway:3000" # Point ngrok to your dockerized gateway
+  #   depends_on:
+  #     - api_gateway
 networks:
   ringisho-net:
     driver: bridge
