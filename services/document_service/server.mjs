@@ -36,10 +36,14 @@ app.post('/approve', (req, res) => {
         }
         console.log(`✅ PDF Generation Complete!`);
         console.log(stdout);
+        if (stderr) {
+            console.error(`⚠️ Script Stderr Output:`);
+            console.error(stderr);
+        }
     });
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`\n📄 Document Service Worker running on http://localhost:${PORT}\n`);
 });

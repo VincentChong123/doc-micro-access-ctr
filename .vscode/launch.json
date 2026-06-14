@@ -2,6 +2,34 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Cloud Run: Run/Debug Locally",
+            "type": "cloudcode.cloudrun",
+            "request": "launch",
+            "build": {
+                "buildpacks": {
+                    "path": "services/document_service/package.json",
+                    "builder": "gcr.io/buildpacks/builder:v1"
+                }
+            },
+            "image": "doc-micro-access-ctr",
+            "service": {
+                "name": "doc-micro-access-ctr",
+                "containerPort": 4000,
+                "resources": {
+                    "limits": {
+                        "memory": "256Mi"
+                    }
+                }
+            },
+            "target": {
+                "minikube": {
+                    "autoStop": false
+                }
+            },
+            "watch": true,
+            "externalPortForward": 3000
+        },
+        {
             "name": "1-Python: Debug AI Service (Uvicorn)",
             "type": "python",
             "request": "launch",
@@ -33,11 +61,15 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug Current JS/MJS File",
+            "name": "3-Node: Debug Current JS/MJS File",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${file}"
+            "program": "${file}",
+            "args": [
+                "Manual-Test-Run-001"
+            ],
+            "console": "integratedTerminal"
         }
     ]
 }

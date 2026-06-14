@@ -5,9 +5,9 @@ docker build -t $IMAGE_NAME .
 
 # 2. Run the container locally (replacing docker-compose)
 # We map port 3000, inject the service URLs, and mount the docs folder for Swagger.
-# Note: If you want this to communicate with your other containers using their names 
+# Note: If you want this to communicate with your other containers using their names
 # (like "ai_service" and "document_service"), you should append `--network ringisho-net
-# assuming that network is still active from docker-compose. Otherwise, you'll need to 
+# assuming that network is still active from docker-compose. Otherwise, you'll need to
 # change the URLs to your local machine's IP address.
 
 PORT_NUM=${1:-3000}

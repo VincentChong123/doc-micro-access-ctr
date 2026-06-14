@@ -12,6 +12,7 @@ RUN npm ci --only=production
 
 COPY . .
 
-EXPOSE 4000
+ENV PORT=4000
+EXPOSE $PORT
 
 CMD ["node", "server.mjs"]

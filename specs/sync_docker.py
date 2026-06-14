@@ -49,15 +49,15 @@ def sync_docker():
         if not script_path.exists():
             print(f"  [Skipped] {script_path.name} not found.")
             return
-        
+
         with open(script_path, "r") as f:
             content = f.read()
-        
+
         # Update container name
         content = re.sub(r'--name\s+[^\s\\]+', f'--name {service_info.get("container_name")}', content)
         # Update network
         content = re.sub(r'--network\s+[^\s\\]+', f'--network {network_name}', content)
-        
+
         # Update port (simplistic regex for standard scripts)
         if "port" in service_info:
             content = re.sub(r'-p\s+\d+:\d+', f'-p {service_info.get("port")}:{service_info.get("port")}', content)
@@ -75,7 +75,7 @@ def sync_docker():
     update_script_ports_and_names(AI_SCRIPT, ai_svc)
     update_script_ports_and_names(DOC_SCRIPT, doc_svc)
     update_script_ports_and_names(API_SCRIPT, api_gw, is_gateway=True)
-    
+
     # Custom update for Minio due to multiple ports
     if MINIO_SCRIPT.exists():
         with open(MINIO_SCRIPT, "r") as f:

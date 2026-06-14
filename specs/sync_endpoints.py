@@ -48,7 +48,7 @@ def sync_endpoints():
     # Verify and print what was written to Config.js
     final_ai = re.search(r'AI_ENDPOINT:\s*"(.*?)"', config_js).group(1)
     final_wf = re.search(r'WORKFLOW_ENDPOINT:\s*"(.*?)"', config_js).group(1)
-    
+
     print("\n--- 2. Written to Config.js ---")
     print(f"  AI_ENDPOINT       -> {final_ai}")
     print(f"  WORKFLOW_ENDPOINT -> {final_wf}")

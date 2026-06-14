@@ -1,8 +1,8 @@
 #!/bin/bash
 IMAGE_NAME="gcp-ai-service:latest"
-#   2. Build the Docker image:                                                                              
-docker build -t $IMAGE_NAME  .                                                    
-                                                                                                          
+#   2. Build the Docker image:
+docker build -t $IMAGE_NAME  .
+
 #   3. Run the container locally (injecting your credentials just like compose did):
 PORT_NUM=${1:-8080}
 docker run -d -p $PORT_NUM:$PORT_NUM \

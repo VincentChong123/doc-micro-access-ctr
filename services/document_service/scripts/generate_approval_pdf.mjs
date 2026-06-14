@@ -3,6 +3,7 @@ import { GoogleAuth } from 'google-auth-library';
 import { PDFDocument } from 'pdf-lib';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 dotenv.config();
 
@@ -52,13 +53,13 @@ async function main() {
     // Added printnotes=false to ensure the cell instructions do not appear in the final PDF
     const exportUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=pdf&gid=${gid}&range=B1:E11&gridlines=false&printnotes=false`;
 
-    const token = await authClient.getAccessToken();
-    const pdfResponse = await fetch(exportUrl, {
-        headers: { 'Authorization': `Bearer ${token.token}` }
+    const pdfResponse = await authClient.request({
+        url: exportUrl,
+        method: 'GET',
+        responseType: 'arraybuffer'
     });
 
-    if (!pdfResponse.ok) throw new Error(`Failed to download PDF: ${pdfResponse.statusText}`);
-    const rawPdfBuffer = await pdfResponse.arrayBuffer();
+    const rawPdfBuffer = pdfResponse.data;
 
     // 5. PDF-LIB: Stamp the Metadata
     console.log("📝 Embedding Revision Metadata into PDF...");
@@ -90,12 +91,49 @@ async function main() {
 
     console.log(`🎉 Success! PDF saved with embedded metadata at: ${outputPath}`);
 
+    // 6.5 Upload to Cloud Storage / MinIO
+    if (process.env.MINIO_ENDPOINT || process.env.GCP_CLOUD_STORAGE_INTEROPERABILITY_TEST_BUCKET_NAME) {
+        console.log(`☁️  Uploading PDF to Storage Bucket...`);
+        const endpoint = process.env.MINIO_ENDPOINT || "https://storage.googleapis.com";
+        const accessKeyId = process.env.MINIO_ACCESS_KEY || process.env.GCP_CLOUD_STORAGE_INTEROPERABILITY_TEST_BUCKET_NAME_ACCESS_KEY;
+        const secretAccessKey = process.env.MINIO_SECRET_KEY || process.env.GCP_CLOUD_STORAGE_INTEROPERABILITY_TEST_BUCKET_NAME_ACCESS_KEY_SECRET;
+        const bucketName = process.env.MINIO_BUCKET_NAME || process.env.GCP_CLOUD_STORAGE_INTEROPERABILITY_TEST_BUCKET_NAME || "ringisho-pdf-bucket";
+
+        const s3Client = new S3Client({
+            region: "auto", // Region is required by SDK but often ignored by MinIO/GCS interoperability
+            endpoint: endpoint,
+            credentials: {
+                accessKeyId: accessKeyId,
+                secretAccessKey: secretAccessKey
+            },
+            // MinIO usually requires path style, GCS can handle virtual hosted style
+            forcePathStyle: !endpoint.includes("googleapis")
+        });
+
+        const fullPath = `${endpoint}/${bucketName}/${REVISION_NAME}.pdf`;
+
+        try {
+            await s3Client.send(new PutObjectCommand({
+                Bucket: bucketName,
+                Key: `${REVISION_NAME}.pdf`,
+                Body: finalPdfBytes,
+                ContentType: "application/pdf"
+            }));
+            console.log(`✅ Successfully uploaded ${REVISION_NAME}.pdf`);
+            console.log(`🔗 Full Storage Path: ${fullPath}`);
+        } catch (uploadError) {
+            console.error(`❌ Failed to upload to ${fullPath}: ${uploadError.message}`);
+        }
+    } else {
+        console.log(`⚠️  Skipping Cloud Storage upload (No MinIO or GCS Credentials provided in environment)`);
+    }
+
     // 7. Write the PDF Path back to Google Sheets!
-    console.log(`📝 Calling sheets_service to write path back to Ringisho!G1...`);
-    // Import dynamically so we don't break earlier script logic if it fails
-    const { js_function_update_cell } = await import('./sheets_service.mjs');
-    await js_function_update_cell('Ringisho', 'G1', outputPath);
-    console.log(`✅ Workflow Complete! Cell updated.`);
+    // console.log(`📝 Calling sheets_service to write path back to Ringisho!G1...`);
+    // // Import dynamically so we don't break earlier script logic if it fails
+    // const { js_function_update_cell } = await import('./sheets_service.mjs');
+    // await js_function_update_cell('Ringisho', 'G1', outputPath);
+    // console.log(`✅ Workflow Complete! Cell updated.`);
 }
 
 main().catch(console.error);
