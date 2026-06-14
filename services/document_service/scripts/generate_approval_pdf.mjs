@@ -110,8 +110,6 @@ async function main() {
             forcePathStyle: !endpoint.includes("googleapis")
         });
 
-        const fullPath = `${endpoint}/${bucketName}/${REVISION_NAME}.pdf`;
-
         try {
             await s3Client.send(new PutObjectCommand({
                 Bucket: bucketName,
@@ -119,21 +117,26 @@ async function main() {
                 Body: finalPdfBytes,
                 ContentType: "application/pdf"
             }));
+            let fullPath = `${endpoint}/${bucketName}/${REVISION_NAME}.pdf`;
+            if (endpoint.includes(':9000')) {
+                const webUiEndpoint = endpoint.replace(':9000', ':9001');
+                fullPath = `${webUiEndpoint}/browser/${bucketName}/${REVISION_NAME}.pdf`;
+            }
             console.log(`✅ Successfully uploaded ${REVISION_NAME}.pdf`);
             console.log(`🔗 Full Storage Path: ${fullPath}`);
         } catch (uploadError) {
-            console.error(`❌ Failed to upload to ${fullPath}: ${uploadError.message}`);
+            console.error(`❌ Failed to upload to ${bucketName}: ${uploadError.message}`);
         }
     } else {
         console.log(`⚠️  Skipping Cloud Storage upload (No MinIO or GCS Credentials provided in environment)`);
     }
 
     // 7. Write the PDF Path back to Google Sheets!
-    // console.log(`📝 Calling sheets_service to write path back to Ringisho!G1...`);
-    // // Import dynamically so we don't break earlier script logic if it fails
-    // const { js_function_update_cell } = await import('./sheets_service.mjs');
-    // await js_function_update_cell('Ringisho', 'G1', outputPath);
-    // console.log(`✅ Workflow Complete! Cell updated.`);
+    console.log(`📝 Calling sheets_service to write path back to Ringisho!G1...`);
+    // Import dynamically so we don't break earlier script logic if it fails
+    const { js_function_update_cell } = await import('../utils/spreadsheet_utils.mjs');
+    await js_function_update_cell('Ringisho', 'G1', outputPath);
+    console.log(`✅ Workflow Complete! Cell updated.`);
 }
 
 main().catch(console.error);
